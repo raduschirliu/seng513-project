@@ -1,5 +1,5 @@
+import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
-import Example from '../Example/Example';
 import './App.css';
 
 export default function App() {
@@ -19,7 +19,8 @@ export default function App() {
           Learn React
         </a>
 
-        <Example />
+        <Link to="/example">Example</Link>
+        <Link to="/board/123">Board</Link>
       </header>
     </div>
   );

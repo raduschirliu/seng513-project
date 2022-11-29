@@ -1,18 +1,35 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './components/App/App';
-import reportWebVitals from './reportWebVitals';
-
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import HomePage from './pages/HomePage/HomePage';
+import ExamplePage from './pages/ExamplePage/ExamplePage';
+import BoardPage from './pages/BoardPage/BoardPage';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />,
+  },
+  {
+    path: '/example',
+    element: <ExamplePage />,
+  },
+  {
+    path: '/board/:boardId',
+    element: <BoardPage />,
+  },
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
