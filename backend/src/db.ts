@@ -1,15 +1,14 @@
 import { MongoClient } from 'mongodb';
 import { IChatConversation } from './models';
 
-export const DB_NAME = 'seng513-project';
+export const DB_NAME = process.env['DB_NAME'] || 'dev';
+const DB_URL = process.env['DB_URL'] || null;
 
-const CONNECTION_URI = process.env['MONGODB_URI'] || null;
-
-if (!CONNECTION_URI) {
-  throw new Error('MONGODB_URI needs to be set in the environment!');
+if (!DB_URL) {
+  throw new Error('DB_URL needs to be set in the environment!');
 }
 
-export const dbClient = new MongoClient(CONNECTION_URI);
+export const dbClient = new MongoClient(DB_URL);
 export const db = dbClient.db(DB_NAME);
 
 export enum CollectionNames {
