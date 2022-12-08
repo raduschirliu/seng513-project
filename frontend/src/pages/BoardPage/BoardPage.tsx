@@ -3,32 +3,53 @@ import Logo from '../../assets/Logo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTableColumns, faList, faGear, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { Draggable, Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import TaskArea from './TaskArea';
 import uuid from "react-uuid";
+import { IUser, ITask, IBoard } from '../../../models';
 
-const exampleItems = [
-  { id: uuid(), content: "Secure a domain name" },
-  { id: uuid(), content: "Hold investor meeting" }
-];
-
-const cols = {
-  [uuid()]: {
-    name: "To Do",
-    items: exampleItems
-  },
-  [uuid()]: {
-    name: "In Progress",
-    items: []
-  },
-  [uuid()]: {
-    name: "Done",
-    items: []
-  }
+export interface Column{
+  [x: string]: {
+      name: string;
+      items: ITask[];
+  };
 }
 
-export default function BoardPage() {
+export default function BoardPage(user: IUser, board: IBoard) {
   const params = useParams();
+  const [toDo, setToDoTasks] = useState([] as ITask[]);
+  const [inProgress, setInProgressTasks] = useState([] as ITask[]);
+  const [complete, setDoneTasks] = useState([] as ITask[]);
+  const cols: Column = {
+    [uuid()]: {
+      name: "To Do",
+      items: toDo
+    },
+    [uuid()]: {
+      name: "In Progress",
+      items: inProgress
+    },
+    [uuid()]: {
+      name: "Done",
+      items: complete
+    }
+  }
   const [columns, setColumns] = useState(cols);
+
+  useEffect(() => {
+    const categorizeTasks = (tasks: ITask[]) => {
+      let seperatedTasks = {'todo': [] as ITask[], 'inprogress': [] as ITask[], 'done': [] as ITask[]}
+      for (let i=0; i< tasks.length; i++){
+        const task = tasks[i];
+        seperatedTasks[task.status].push(task);
+      }
+      setToDoTasks(seperatedTasks['todo']);
+      setInProgressTasks(seperatedTasks['inprogress']);
+      setDoneTasks(seperatedTasks['done']);
+    }
+
+    categorizeTasks(board.tasks);
+  })
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -103,8 +124,8 @@ export default function BoardPage() {
         </div>
 
         <div className='d-flex flex-row mx-2 avatar-container'>
-          <div className="avatar">U</div>
-          <p>User</p>
+          <div className="avatar">{user.name[0]}</div>
+          <p>{user.name}</p>
         </div>
       </div>
 
@@ -118,56 +139,7 @@ export default function BoardPage() {
         </div>
 
         <div className='d-flex w-100 mw-100 task-column-container'>
-          <DragDropContext onDragEnd={result => onDragEnd(result)}>
-            {
-              Object.entries(columns).map(([columnId, column], index) => {
-                return (
-                  <div className='bg-light task-column' key={columnId}>
-                    <h3>{column.name}</h3>
-                    <div style={{minHeight: "93%", height: "93%"}}>
-                      <Droppable droppableId={columnId} key={columnId}>
-                        {(provided, snapshot) => {
-                          return (
-                            <div {...provided.droppableProps} ref={provided.innerRef} style={{ background: snapshot.isDraggingOver ? "lightblue" : "#f8f9fa", minHeight: "100%", maxHeight: "100%" }} >
-                              {
-                                column.items.map((item, index) => {
-                                  return (
-                                    <Draggable key={item.id} draggableId={item.id} index={index}>
-                                      {(provided, snapshot) => {
-                                        return (
-                                          <div ref={provided.innerRef}{...provided.draggableProps}{...provided.dragHandleProps}
-                                            style={{
-                                              userSelect: "none",
-                                              padding: 16,
-                                              margin: "0 0 8px 0",
-                                              minHeight: "50px",
-                                              backgroundColor: snapshot.isDragging
-                                                ? "#d4d2d2"
-                                                : "white",
-                                              color: "black",
-                                              borderRadius: "0.5em",
-                                              border: "1px solid black",
-                                              ...provided.draggableProps.style
-                                            }}>
-                                            {item.content}
-                                          </div>
-                                        );
-                                      }}
-                                    </Draggable>
-                                  );
-                                })
-                              }
-                              {provided.placeholder}
-                            </div>
-                          )
-                        }}
-                      </Droppable>
-                    </div>
-                  </div>
-                );
-              })
-            }
-          </DragDropContext>
+          <TaskArea columns={cols} onDragEnd={onDragEnd}/>
         </div >
       </div >
     </div >
