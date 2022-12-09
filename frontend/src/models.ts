@@ -3,7 +3,8 @@ export interface IMongoItem {
 }
 
 export interface IUser extends IMongoItem {
-  name: string;
+  username: string;
+  fullName: string;
   avatarUrl: string;
 }
 
