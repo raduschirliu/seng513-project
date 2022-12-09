@@ -1,30 +1,27 @@
-export interface IUser {
-  id: string;
+import { WithId, Document } from 'mongodb';
+
+export interface IUser extends WithId<Document> {
   name: string;
   email: string;
   avatarUrl: string;
 }
 
-export interface IChatMessage {
-  id: string;
+export interface IChatMessage extends WithId<Document> {
   message: string;
   author: string;
 }
 
-export interface IChatConversation {
-  id: string;
+export interface IChatConversation extends WithId<Document> {
   users: string[];
   messages: IChatMessage[];
 }
 
-export interface IComment {
-  id: string;
+export interface IComment extends WithId<Document> {
   author: string;
   message: string;
 }
 
-export interface ITask {
-  id: string;
+export interface ITask extends WithId<Document> {
   name: string;
   status: 'todo' | 'inprogress' | 'done';
   description: string;
@@ -32,15 +29,8 @@ export interface ITask {
   comments: IComment[];
 }
 
-export interface IBoard {
-  id: string;
+export interface IBoard extends WithId<Document> {
   name: string;
   users: string[];
   tasks: ITask[];
-}
-
-export interface IState {
-  boards: IBoard[];
-  users: IUser[];
-  chats: IChatConversation[];
 }
