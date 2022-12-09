@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ObjectId } from 'mongodb';
 import { collections, db } from '../db';
-import { IChatConversation } from '../models';
+import { IChatConversation, IChatMessage } from '../models';
 
 const router = express.Router();
 
@@ -12,6 +12,11 @@ const router = express.Router();
 type IGetConversationsByIdResponse = IChatConversation;
 router.get('/conversations/:id', async (req, res) => {
   const id = req.params.id;
+
+  if (!ObjectId.isValid(id)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
 
   const conversationsCollection = collections.conversations();
   const conversation = await conversationsCollection.findOne({
@@ -62,7 +67,7 @@ router.get('/conversations', async (req, res) => {
   const conversationsCollection = collections.conversations();
 
   // TODO: get this from auth token
-  const userId = '';
+  const userId = 'test-user-id';
 
   const cursor = conversationsCollection.find({
     users: userId,
@@ -70,6 +75,53 @@ router.get('/conversations', async (req, res) => {
 
   const conversations = await cursor.toArray();
   res.json(conversations as IGetAllConversationsResponse);
+});
+
+/* Send a message in a conversation */
+interface IConversationMessageRequest {
+  message: string;
+}
+type IConversationMessageResponse = IChatMessage;
+router.post('/conversations/:conversationId/message', async (req, res) => {
+  const conversationId = req.params.conversationId;
+  const bodyData = req.body as IConversationMessageRequest;
+
+  if (!bodyData?.message) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  if (!ObjectId.isValid(conversationId)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  const conversationsCollection = collections.conversations();
+  const conversation = await conversationsCollection.findOne({
+    _id: new ObjectId(conversationId),
+  });
+
+  if (!conversation) {
+    res.sendStatus(StatusCodes.NOT_FOUND);
+    return;
+  }
+
+  // TODO: Check if user is in conversation before returning
+  const userId = 'test-user-id';
+
+  const message: IChatMessage = {
+    _id: new ObjectId(),
+    author: userId,
+    message: bodyData.message,
+    timestamp: new Date(),
+  };
+
+  conversationsCollection.updateOne(
+    { _id: conversation._id },
+    { $push: { messages: message } }
+  );
+
+  return res.json(message as IConversationMessageResponse);
 });
 
 export default router;

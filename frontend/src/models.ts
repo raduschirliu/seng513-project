@@ -1,30 +1,30 @@
-export interface IUser {
-  id: string;
+export interface IMongoItem {
+  _id: string;
+}
+
+export interface IUser extends IMongoItem {
   name: string;
   email: string;
   avatarUrl: string;
 }
 
-export interface IChatMessage {
-  id: string;
+export interface IChatMessage extends IMongoItem {
   message: string;
   author: string;
+  timestamp: Date;
 }
 
-export interface IChatConversation {
-  id: string;
+export interface IChatConversation extends IMongoItem {
   users: string[];
   messages: IChatMessage[];
 }
 
-export interface IComment {
-  id: string;
+export interface IComment extends IMongoItem {
   author: string;
   message: string;
 }
 
-export interface ITask {
-  id: string;
+export interface ITask extends IMongoItem {
   name: string;
   status: 'todo' | 'inprogress' | 'done';
   description: string;
@@ -32,8 +32,7 @@ export interface ITask {
   comments: IComment[];
 }
 
-export interface IBoard {
-  id: string;
+export interface IBoard extends IMongoItem {
   name: string;
   users: string[];
   tasks: ITask[];

@@ -8,6 +8,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage';
 import ExamplePage from './pages/ExamplePage/ExamplePage';
 import BoardPage from './pages/BoardPage/BoardPage';
+import ConversationsListPage from './pages/ChatPages/ConversationsListPage';
+import ConversationPage from './pages/ChatPages/ConversationPage';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
   {
     path: '/board/:boardId',
     element: <BoardPage />,
+  },
+  {
+    path: '/chat',
+    element: <ConversationsListPage />,
+  },
+  {
+    path: '/chat/:conversationId',
+    element: <ConversationPage />,
   },
 ]);
 

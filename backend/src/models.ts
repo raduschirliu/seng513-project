@@ -9,6 +9,7 @@ export interface IUser extends WithId<Document> {
 export interface IChatMessage extends WithId<Document> {
   message: string;
   author: string;
+  timestamp: Date;
 }
 
 export interface IChatConversation extends WithId<Document> {
