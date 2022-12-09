@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Form, Spinner } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+  Spinner,
+  Stack,
+} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { useTimeout } from 'usehooks-ts';
-import useInterval from 'usehooks-ts/dist/esm/useInterval/useInterval';
+import { useInterval } from 'usehooks-ts';
 import { getConversation, sendChatMessage } from '../../api/chat';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import { IChatConversation } from '../../models';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 const CHAT_REFRESH_INTERVAL_MS = 5000;
 
@@ -73,26 +82,53 @@ export default function ConversationsPage() {
   }
 
   return (
-    <div>
-      <div>
-        <h1>Conversation: {conversation._id}</h1>
-        <h2>Users:</h2>
-        {conversation.users.map((userId) => (
-          <p key={userId}>{userId}</p>
-        ))}
-      </div>
-      <div>
-        {conversation.messages.map((msg) => (
-          <ChatMessage key={msg._id} message={msg} />
-        ))}
-      </div>
-      <div>
-        <Form.Control
-          type="text"
-          onChange={(event) => setCurrentMessage(event.target.value)}
-        />
-        <Button onClick={() => sendMessage()}>Send message</Button>
-      </div>
-    </div>
+    <Container>
+      <Row>
+        <Col md={2}>Navbar goes here</Col>
+
+        <Col md={8}>
+          <Container>
+            <Row>
+              <h1>Conversation: {conversation._id}</h1>
+            </Row>
+
+            <Row>
+              {conversation.messages.map((msg) => (
+                <ChatMessage
+                  key={msg._id}
+                  message={msg}
+                  sentByMe={msg.message === 'first message'}
+                />
+              ))}
+            </Row>
+
+            <Row>
+              <Stack direction="horizontal">
+                <Form.Control
+                  type="text"
+                  onChange={(event) => setCurrentMessage(event.target.value)}
+                />
+                <Button onClick={() => sendMessage()}>
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </Button>
+              </Stack>
+            </Row>
+          </Container>
+        </Col>
+
+        <Col>
+          <Container>
+            <Row>
+              <h2>Users:</h2>
+            </Row>
+            {conversation.users.map((userId) => (
+              <Row>
+                <p key={userId}>{userId}</p>
+              </Row>
+            ))}
+          </Container>
+        </Col>
+      </Row>
+    </Container>
   );
 }
