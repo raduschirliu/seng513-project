@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { IChatMessage } from '../../models';
 
@@ -7,36 +8,39 @@ export interface IParams {
 }
 
 export default function ChatMessage({ message, sentByMe }: IParams) {
-  function Header() {
-    return <p>{message.author}</p>;
-  }
-
-  function Body() {
+  function MessageBody() {
     return (
-      <Card>
-        <Card.Body>{message.message}</Card.Body>
-      </Card>
-    );
-  }
-
-  function Swappable({ comp }: any) {
-    return sentByMe ? (
-      <Row>
-        <Col></Col>
-        <Col>{comp}</Col>
-      </Row>
-    ) : (
-      <Row>
-        <Col>{comp}</Col>
-        <Col></Col>
-      </Row>
+      <>
+        <p className="m-0 fw-semibold">{message.author}</p>
+        <Card
+          bg={sentByMe ? 'primary' : 'light'}
+          text={sentByMe ? 'white' : 'dark'}
+        >
+          <Card.Body>{message.message}</Card.Body>
+        </Card>
+        <p className="m-0 fs-6 fst-italic">Sent {moment(message.timestamp).calendar()}</p>
+      </>
     );
   }
 
   return (
     <Container>
-      <Swappable comp={<Header />} />
-      <Swappable comp={<Body />} />
+      {/* Either align on left or right, depending on who sent the message */}
+      {sentByMe ? (
+        <Row>
+          <Col></Col>
+          <Col>
+            <MessageBody />
+          </Col>
+        </Row>
+      ) : (
+        <Row>
+          <Col>
+            <MessageBody />
+          </Col>
+          <Col></Col>
+        </Row>
+      )}
     </Container>
   );
 }

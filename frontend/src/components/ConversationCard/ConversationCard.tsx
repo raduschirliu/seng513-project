@@ -10,7 +10,7 @@ export default function ConversationCard({ conversation }: IProps) {
   const navigate = useNavigate();
 
   return (
-    <Card onClick={() => navigate(`/chat/${conversation._id}`)}>
+    <Card role="button" onClick={() => navigate(`/chat/${conversation._id}`)}>
       <Card.Body>Users: {conversation.users.join(', ')}</Card.Body>
     </Card>
   );

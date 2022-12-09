@@ -15,8 +15,9 @@ import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import { IChatConversation } from '../../models';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import ThreeColPage from '../../components/Page/ThreeColPage';
 
-const CHAT_REFRESH_INTERVAL_MS = 5000;
+const CHAT_REFRESH_INTERVAL_MS = 2500;
 
 // TODO: Replace with actual user ID
 const userId = 'test-user-id';
@@ -66,11 +67,7 @@ export default function ConversationsPage() {
   }, [refresh]);
 
   if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        Loading...
-      </Spinner>
-    );
+    return <Spinner animation="border" role="status"></Spinner>;
   }
 
   if (!conversation) {
@@ -81,54 +78,60 @@ export default function ConversationsPage() {
     );
   }
 
+  function SidePage() {
+    if (!conversation) return null;
+
+    return (
+      <Container>
+        <Row>
+          <h2>Users:</h2>
+        </Row>
+        {conversation.users.map((userId) => (
+          <Row>
+            <p key={userId}>{userId}</p>
+          </Row>
+        ))}
+      </Container>
+    );
+  }
+
   return (
-    <Container>
-      <Row>
-        <Col md={2}>Navbar goes here</Col>
+    <ThreeColPage sidePane={<SidePage />}>
+      <Container>
+        <Row>
+          <Col>
+            <h1>Conversation: {conversation._id}</h1>
+          </Col>
+        </Row>
 
-        <Col md={8}>
-          <Container>
-            <Row>
-              <h1>Conversation: {conversation._id}</h1>
-            </Row>
-
-            <Row>
+        <Row className="my-4">
+          <Col>
+            <Stack gap={4}>
               {conversation.messages.map((msg) => (
                 <ChatMessage
                   key={msg._id}
                   message={msg}
-                  sentByMe={msg.message === 'first message'}
+                  sentByMe={msg.author === userId}
                 />
               ))}
-            </Row>
+            </Stack>
+          </Col>
+        </Row>
 
-            <Row>
-              <Stack direction="horizontal">
-                <Form.Control
-                  type="text"
-                  onChange={(event) => setCurrentMessage(event.target.value)}
-                />
-                <Button onClick={() => sendMessage()}>
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </Button>
-              </Stack>
-            </Row>
-          </Container>
-        </Col>
-
-        <Col>
-          <Container>
-            <Row>
-              <h2>Users:</h2>
-            </Row>
-            {conversation.users.map((userId) => (
-              <Row>
-                <p key={userId}>{userId}</p>
-              </Row>
-            ))}
-          </Container>
-        </Col>
-      </Row>
-    </Container>
+        <Row>
+          <Col>
+            <Stack direction="horizontal" gap={4}>
+              <Form.Control
+                type="text"
+                onChange={(event) => setCurrentMessage(event.target.value)}
+              />
+              <Button onClick={() => sendMessage()}>
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </Button>
+            </Stack>
+          </Col>
+        </Row>
+      </Container>
+    </ThreeColPage>
   );
 }

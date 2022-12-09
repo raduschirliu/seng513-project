@@ -107,7 +107,7 @@ router.post('/conversations/:conversationId/message', async (req, res) => {
   }
 
   // TODO: Check if user is in conversation before returning
-  const userId = 'test-user-id';
+  const userId = 'another-user';
 
   const message: IChatMessage = {
     _id: new ObjectId(),

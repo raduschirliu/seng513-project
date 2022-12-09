@@ -1,3 +1,11 @@
+import { Stack } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 export default function Nav() {
-  return <div>Nav bar here</div>;
+  return (
+    <Stack>
+      <Link to="/">Home</Link>
+      <Link to="/chat">Chat</Link>
+    </Stack>
+  );
 }
