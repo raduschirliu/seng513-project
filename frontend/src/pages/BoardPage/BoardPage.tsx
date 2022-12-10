@@ -5,6 +5,7 @@ import { faPlus, faTableColumns, faList, faGear, faUserGroup } from '@fortawesom
 import { Draggable, Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useState } from 'react';
 import uuid from "react-uuid";
+import UserList from "../../components/UserList/UserList"
 
 const exampleItems = [
   { id: uuid(), content: "Secure a domain name" },
@@ -170,6 +171,11 @@ export default function BoardPage() {
           </DragDropContext>
         </div >
       </div >
+      <div style={{width: "19%", minWidth: "265px", paddingLeft: "0.5vw", paddingTop: "12px"}}>
+        <div>
+          <UserList/>
+        </div>
+      </div>
     </div >
   );
 }
