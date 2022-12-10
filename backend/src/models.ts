@@ -1,10 +1,14 @@
 import { WithId, Document } from 'mongodb';
 
 export interface IUser extends WithId<Document> {
-  name: string;
-  email: string;
+  username: string;
+  passwordHash?: string;
+
+  fullName: string;
   avatarUrl: string;
 }
+
+export type ISanitizedUser = Omit<IUser, 'passwordHash'>;
 
 export interface IChatMessage extends WithId<Document> {
   message: string;
@@ -32,5 +36,6 @@ export interface ITask extends WithId<Document> {
 export interface IBoard extends WithId<Document> {
   name: string;
   users: string[];
+  admins: string[];
   tasks: ITask[];
 }

@@ -1,16 +1,18 @@
-import { createApi } from './baseApi';
-
-const api = createApi('/test');
+import Api from './api';
 
 export interface IPingResponse {
   message: string;
   yourMessage: string;
 }
 
-function ping(message: string) {
-  return api
-    .post('/ping', { message })
-    .then((res) => res.data as IPingResponse);
-}
+export class TestApi extends Api {
+  constructor() {
+    super('/test');
+  }
 
-export { ping };
+  ping(message: string) {
+    return this.api
+      .post('/ping', { message }, { headers: this.headers })
+      .catch((res) => res.data as IPingResponse);
+  }
+}
