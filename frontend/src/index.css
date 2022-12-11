@@ -71,7 +71,7 @@ code {
 }
 
 .task-column-container{
-  min-height: 88%;
+  min-height: 83%;
   justify-content: center;
 }
 
@@ -84,6 +84,16 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.button-container{
+  margin: 0 2em;
+}
+
+.button-container button{
+  color: white;
+  border: none;
+  padding: 0.5em;
 }
 
 .plus-icon{

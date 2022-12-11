@@ -1,4 +1,5 @@
 // @ts-nocheck
+// @ts-nocheck
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,8 +11,6 @@ import { AuthContextProvider } from './state/auth/AuthContextProvider';
 import HomePage from './pages/HomePage/HomePage';
 import ExamplePage from './pages/ExamplePage/ExamplePage';
 import BoardPage from './pages/BoardPage/BoardPage';
-import LoginPage from './pages/LoginPage/LoginPage';
-import ProtectedPage from './pages/ProtectedPage/ProtectedPage';
 
 const router = createBrowserRouter([
   {
@@ -23,20 +22,8 @@ const router = createBrowserRouter([
     element: <ExamplePage />,
   },
   {
-    path: '/:userId/board/:boardId',
-    element: <BoardPage/>,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/protected/',
-    element: (
-      <ProtectedPage>
-        <p>Can only see this if you're logged in!!!</p>
-      </ProtectedPage>
-    ),
+    path: '/board/:boardId',
+    element: <BoardPage user={user} board={board}/>,
   },
 ]);
 
