@@ -37,3 +37,10 @@ export interface IBoard extends IMongoItem {
   users: string[];
   tasks: ITask[];
 }
+
+export type ApiResponse<T> =
+  | { success: false; error: string }
+  | {
+      success: true;
+      data: T;
+    };

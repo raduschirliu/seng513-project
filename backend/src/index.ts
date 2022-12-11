@@ -8,6 +8,8 @@ import bodyParser from 'body-parser';
 import testRouter from './routes/test';
 import chatRouter from './routes/chat';
 import authRouter from './routes/auth';
+import tasksRouter from './routes/tasks';
+import boardsRouter from './routes/boards';
 
 const PORT = Number.parseInt(process.env['PORT'] || '5000');
 
@@ -18,6 +20,8 @@ app.use(bodyParser.json());
 app.use('/test', testRouter);
 app.use('/chat', chatRouter);
 app.use('/auth', authRouter);
+app.use('/tasks', tasksRouter);
+app.use('/boards', boardsRouter);
 
 app.listen(PORT, async () => {
   console.log(`Application started on port ${PORT}`);

@@ -6,6 +6,7 @@ import { createUser, loginUser } from '../auth';
 import { ISanitizedUser } from '../models';
 
 const router = express.Router();
+export default router;
 
 /**************************************************
  * Logging in a user
@@ -68,6 +69,8 @@ router.post('/signup', async (req, res) => {
   try {
     const authData = await createUser(data.username, data.password);
 
+    // TODO(radu): Set username and avatar URL
+
     if (!authData) {
       res.sendStatus(StatusCodes.BAD_REQUEST);
       return;
@@ -81,4 +84,3 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-export default router;
