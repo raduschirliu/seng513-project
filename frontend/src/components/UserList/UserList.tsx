@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 export default function UserList() {
 
-    const dummyNames = ['Alex Zegras', 'Blaire Yankapov', 'Clive Xavier', 'Danielle Washington', 'Evan Veilleux'];
+    const dummyNames = ['Alex Zegras', 'Blaire Yankapov', 'Clive Xavier', 'Danielle Washington', 'Evan Veilleux', 'Francine Underhill'];
 
   return (
     <div>
