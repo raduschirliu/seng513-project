@@ -45,6 +45,14 @@ label {
     font-weight: 700;
 }
 
+.leftHeroFeaturesList {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 200px;
+    font-weight: 200;
+}
+
 .rightHero {
     position: absolute;
     left: 60%;
@@ -76,7 +84,6 @@ label {
     border-radius: 10px;
     color: white;
     font-weight: 700;
-    font-size: 25px;
-    margin-top: 10px;
+    font-size: 23px;
     cursor: pointer;
 }
