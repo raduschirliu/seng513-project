@@ -43,11 +43,17 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
+<<<<<<< HEAD
   <React.StrictMode>
     <AuthContextProvider>
       <RouterProvider router={router} />
     </AuthContextProvider>
   </React.StrictMode>
+=======
+  // <React.StrictMode>
+    <RouterProvider router={router} />
+  // </React.StrictMode>
+>>>>>>> 730e307d96c4cb7d063a4dd1af2b8ca52d17a2ec
 );
 
 // If you want to start measuring performance in your app, pass a function
