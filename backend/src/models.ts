@@ -1,4 +1,4 @@
-import { WithId, Document } from 'mongodb';
+import { WithId, Document, ObjectId } from 'mongodb';
 
 export interface IUser extends WithId<Document> {
   username: string;
@@ -21,21 +21,23 @@ export interface IChatConversation extends WithId<Document> {
 }
 
 export interface IComment extends WithId<Document> {
-  author: string;
+  authorId: ObjectId;
   message: string;
+  timestamp: Date;
 }
 
 export interface ITask extends WithId<Document> {
   name: string;
+  assignedUserIds: ObjectId[];
   status: 'todo' | 'inprogress' | 'done';
   description: string;
-  assigned: string[];
   comments: IComment[];
+  createdAt: Date;
 }
 
 export interface IBoard extends WithId<Document> {
   name: string;
-  users: string[];
-  admins: string[];
+  userIds: ObjectId[];
+  adminIds: ObjectId[];
   tasks: ITask[];
 }

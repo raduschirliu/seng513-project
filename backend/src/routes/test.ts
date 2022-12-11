@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { verifyAuthToken } from '../auth';
 
 const router = express.Router();
+export default router;
 
 interface IPingRequest {
   message: string;
@@ -33,4 +34,3 @@ router.get('/authenticated', (req, res) => {
   }
 });
 
-export default router;

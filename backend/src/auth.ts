@@ -107,7 +107,7 @@ export async function createUser(
  * @param req The request sent to the server
  * @returns The userId of the logged in user, or null if there is no valid user
  */
-export function verifyAuthToken(req: Request): string | null {
+export function verifyAuthToken(req: Request): ObjectId | null {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -131,7 +131,15 @@ export function verifyAuthToken(req: Request): string | null {
       return null;
     }
 
-    return payload.sub;
+    if (!ObjectId.isValid(payload.sub)) {
+      console.error(
+        'Got a valid userid that is not an ObjectId: ',
+        payload.sub
+      );
+      return null;
+    }
+
+    return new ObjectId(payload.sub);
   } catch {
     return null;
   }
