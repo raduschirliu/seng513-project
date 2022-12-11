@@ -18,8 +18,7 @@ export interface IChatConversation {
 }
 
 export interface IComment {
-  id: string;
-  author: string;
+  author: IUser;
   message: string;
 }
 
@@ -28,7 +27,7 @@ export interface ITask {
   name: string;
   status: 'todo' | 'inprogress' | 'done';
   description: string;
-  assigned: string[];
+  assigned: IUser[];
   comments: IComment[];
 }
 
