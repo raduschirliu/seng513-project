@@ -28,6 +28,7 @@ export interface IComment extends WithId<Document> {
 
 export interface ITask extends WithId<Document> {
   name: string;
+  createdBy: ObjectId;
   assignedUserIds: ObjectId[];
   status: 'todo' | 'inprogress' | 'done';
   description: string;
