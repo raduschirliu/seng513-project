@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/board/:boardId',
-    element: <BoardPage user={user} board={board}/>,
+    element: <BoardPage />,
   },
 ]);
 
