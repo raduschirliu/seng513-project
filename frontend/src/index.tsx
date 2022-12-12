@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-nocheck
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -5,6 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { AuthContextProvider } from './state/auth/AuthContextProvider';
 import HomePage from './pages/HomePage/HomePage';
 import ExamplePage from './pages/ExamplePage/ExamplePage';
 import BoardPage from './pages/BoardPage/BoardPage';
@@ -20,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/board/:boardId',
-    element: <BoardPage />,
+    element: <BoardPage user={user} board={board}/>,
   },
 ]);
 
@@ -29,7 +32,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   // <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
   // </React.StrictMode>
 );
 

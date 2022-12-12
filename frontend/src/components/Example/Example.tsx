@@ -1,13 +1,14 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { ping } from '../../api/test';
+import { useState } from 'react';
+import { TestApi } from '../../api/test';
 import { Alert, Button, FormControl } from 'react-bootstrap';
 import TaskDetails from '../TaskDetails/TaskDetails';
 import { IComment, ITask, IUser } from '../../../models';
+import useApi from '../../state/useApi';
 
 export default function Example() {
   const [message, setMessage] = useState<string>('');
   const [response, setResponse] = useState<string>('');
+  const testApi = useApi(TestApi);
 
   let ass1: IUser = {
     id: "0",
@@ -42,7 +43,7 @@ export default function Example() {
   }
 
   function sendMessage() {
-    ping(message).then((data) => {
+    testApi.ping(message).then((data) => {
       setResponse(JSON.stringify(data, null, 2));
     });
   }
