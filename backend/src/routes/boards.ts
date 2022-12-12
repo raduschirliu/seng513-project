@@ -211,3 +211,85 @@ router.post('/:boardId/tasks', async (req, res) => {
 
   successResponse<CreateTaskResponse>(res, task);
 });
+
+/**************************************************
+ * Return tasks that is assigned to user
+ **************************************************/
+
+type UserAssignedTasksResponse = ITask[];
+
+router.get('/boards/:boardId/your-tasks', async (req, res) => {
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
+
+  if (!ObjectId.isValid(req.params.boardId)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  const boardObjId = new ObjectId(req.params.boardId);
+  const board = await collections.boards().findOne({
+    _id: boardObjId,
+    $or: [{ userIds: userId }, { adminIds: userId }],
+  });
+
+  if (!board) {
+    errorResponse(res, 'Board does not exist');
+    return;
+  }
+
+  let userTasks = new Array<ITask>();
+  const tasks = board.tasks;
+  for (let i=0; i<tasks.length; i++){
+    if (tasks[i].assignedUserIds.includes(userId)){
+      userTasks.push(tasks[i]);
+    }
+  }
+
+  successResponse<UserAssignedTasksResponse>(res, userTasks);
+
+})
+
+/**************************************************
+ * Return tasks that user created on board
+ **************************************************/
+
+type UserCreatedTasksResponse = ITask[];
+
+router.get('/boards/:boardId/your-created-tasks', async (req, res) => {
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
+
+  if (!ObjectId.isValid(req.params.boardId)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  const boardObjId = new ObjectId(req.params.boardId);
+  const board = await collections.boards().findOne({
+    _id: boardObjId,
+    $or: [{ userIds: userId }, { adminIds: userId }],
+  });
+
+  if (!board) {
+    errorResponse(res, 'Board does not exist');
+    return;
+  }
+
+  let createdTasks = new Array<ITask>();
+  const tasks = board.tasks;
+  for (let i=0; i<tasks.length; i++){
+    if (tasks[i].createdBy === userId){
+      createdTasks.push(tasks[i]);
+    }
+  }
+
+  successResponse<UserCreatedTasksResponse>(res, createdTasks);
+})
+
