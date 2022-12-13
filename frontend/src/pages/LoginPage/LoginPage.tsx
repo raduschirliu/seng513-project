@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import useAuth from '../../state/auth/useAuth';
+import "./loginStyles.css"
+import logo from "./img/logo.png";
 
 type LoginFormData = {
   username: string;
@@ -35,41 +37,41 @@ export default function LoginPage() {
   };
 
   return (
-    <Container>
-      <Row className="pb-5">
-        <Col>Status: {status}</Col>
-      </Row>
-      {isLoggedIn() && (
-        <Row className="pb-5">
-          <Col>
-            <Button onClick={() => logout()}>Logout</Button>
-          </Col>
-        </Row>
-      )}
-      <Row>
-        <Col>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group>
-              <Form.Label>Username:</Form.Label>
-              <Form.Control
-                type="text"
-                {...register('username', { required: true })}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Password:</Form.Label>
-              <Form.Control
-                type="password"
-                id="password"
-                {...register('password', { required: true })}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Login
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <nav className="login-navBarContainer">
+        <h1 className="login-navBarTitle">Log In</h1>
+        {/* <p>Status: {status}</p>
+        {isLoggedIn() && <Button onClick={() => logout()}>Logout</Button> } */}
+      </nav>
+      <section className="login-heroSection">
+        <div className="login-leftHero">
+          <img className="login-leftHeroImage" src={logo} alt="" />
+          <p className="login-leftHeroText">
+          A software curated for agile development!
+          </p>
+          <ul className="login-leftHeroFeaturesList">
+          <li><span className="login-checkMark">✓</span> Create a project specific board.</li>
+            <li><span className="login-checkMark">✓</span> Create &amp; store tasks on a project board.</li>
+            <li><span className="login-checkMark">✓</span> Join an exisiting project board through a code.</li>
+            <li><span className="login-checkMark">✓</span> Self assign a task &amp;  comment on tasks.</li>
+            <li><span className="login-checkMark">✓</span> And so much more!</li>
+          </ul>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="login-rightHero" action="">
+          <label className="login-label" htmlFor="email">Username:</label>
+          <input {...register("username", {required: true})} className="login-textbox" type="text" required/><br /><br />
+          <label className="login-label" htmlFor="password">Password:</label>
+          <input {...register("password", {required: true})} className="login-textbox" type="password" required/><br /><br />
+          <div className="login-loginButtonContainer">
+            <input type="submit" value="Log In" className="login-loginButton" />
+          </div>
+          <div className="login-createAccountContainer">
+          <hr></hr>
+          <p className="login-createAccountText">Don't have an account yet?</p>
+          <input type="button" defaultValue="Create an account" className="login-createAccountButton" />
+          </div>
+        </form>
+      </section>
+    </div>
   );
 }
