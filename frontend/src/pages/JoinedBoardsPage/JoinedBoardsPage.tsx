@@ -68,7 +68,11 @@ export default function JoinedBoardsPage() {
         >
           <h1 style={{}}>Your Projects</h1>
           <div style={{ position: 'absolute', right: '8.2vw', top: '20px' }}>
-            <CreateBoardModal />
+            <CreateBoardModal
+              onBoardCreated={(board: IBoard) => {
+                setBoards((prevValue) => [...prevValue, board]);
+              }}
+            />
           </div>
         </div>
         <div

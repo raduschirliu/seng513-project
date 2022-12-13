@@ -31,16 +31,12 @@ export class BoardsApi extends Api {
       .then((res) => res.data);
   }
 
-  createBoard(
-    boardname: string,
-    adminId: string
-  ): Promise<ApiResponse<IBoard>> {
+  createBoard(name: string): Promise<ApiResponse<IBoard>> {
     return this.api
       .post(
         '/create',
         {
-          boardname,
-          adminId,
+          name,
         },
         { headers: this.headers }
       )
