@@ -82,24 +82,23 @@ export default function Nav() {
         </Col>
       </Row>
 
-      <Row>
+      <Row className='my-5 py-5'>
         <Col>
           {currentBoardId && <ProjectSection boardId={currentBoardId} />}
         </Col>
       </Row>
 
-      <Row>
+      <Row className='my-5 py-5'>
         <Col>
           <AccountSection />
         </Col>
       </Row>
 
       {/* User settings */}
-      <div className="d-flex flex-row">
+      <div className="d-flex flex-row mt-5 pt-5 align-items-center">
         <img
           src={user.avatarUrl}
-          width={64}
-          className="rounded-circle"
+          className="avatar"
           alt="User avatar"
         />
         <p className="flex-grow-1 align-middle h-auto m-0 ms-2">
