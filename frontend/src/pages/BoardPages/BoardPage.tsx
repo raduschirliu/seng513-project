@@ -156,6 +156,13 @@ export default function BoardPage() {
     }
   };
 
+  const addTask = (task: ITask) => {
+    // TODO: complete
+
+    // Opens a new task window to edit task details
+    // Add task to database
+  }
+
   const modifyTask = (task: ITask) => {
     const taskToSend: Partial<ITask> = {
       status: task.status,
@@ -165,13 +172,11 @@ export default function BoardPage() {
     });
   };
 
-  const onTaskSelected = (task: ITask) => {
-    setSelectedTask(task);
-  };
-
-  const onDetailsClose = () => {
-    setSelectedTask(false);
-  };
+  const getTasks = () => {
+    // TODO: complete
+    
+    // Retrieves tasks from the database/server
+  }
 
   const viewMyTasksHandler = () => {
     let tasks: ITask[] = [];
@@ -191,10 +196,6 @@ export default function BoardPage() {
     }
 
     categorizeTasks(tasks);
-  };
-
-  if (!user) {
-    return null;
   }
 
   return (

@@ -13,53 +13,29 @@ import BoardTile from './BoardTile';
 import { Button } from 'react-bootstrap';
 import { BoardsApi } from '../../api/boards';
 import useApi from '../../state/useApi';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useAuth from '../../state/auth/useAuth';
+import { IBoard } from '../../models';
+import Page from '../../components/Page/Page';
 
 export default function JoinedBoardsPage() {
+  const { user } = useAuth();
   const [response, setResponse] = useState<string>('');
   const boardsApi = useApi(BoardsApi);
+  const [boards, setBoards] = useState<IBoard[]>([]);
+
+  useEffect(() => {
+    getBoards();
+  }, [getBoards]);
 
   function getBoards() {
-    let temp = [];
-    let boards = [];
     boardsApi.getAll().then((data) => {
-      setResponse(JSON.stringify(data, null, 2));
+      if (data.success) {
+        setBoards(data.data);
+      } else {
+        alert('Could not load boards. Please try again later.');
+      }
     });
-
-    console.log(response);
-
-    if (response === undefined) {
-      return [{ name: 'Something Broke', id: 0 }];
-    }
-
-    let lines = response.split('\n');
-
-    for (let line = 3; line < lines.length; line++) {
-      if (lines[line].includes(']')) {
-        break;
-      }
-      if (lines[line].includes('{') || lines[line].includes('}')) {
-        continue;
-      }
-      //console.log("Pushing user: " + lines[line]);
-      temp.push(lines[line].trim());
-    }
-
-    if (temp.length < 1) {
-      return [
-        { name: 'Something Broke', id: 0 },
-        { name: 'No Boards Found', id: 0 },
-      ];
-    }
-
-    for (let i = 0; i < temp.length; i++) {
-      let tempData = temp[i].split(':');
-      let extractedName = tempData[0].replaceAll('"', '');
-      let extractedId = parseInt(tempData[1]);
-      boards.push({ name: extractedName, id: extractedId });
-    }
-
-    return boards;
   }
 
   let enteredId = '';
@@ -77,7 +53,7 @@ export default function JoinedBoardsPage() {
   }
 
   return (
-    <div className="d-flex bg-light page">
+    <Page>
       <div className="d-flex flex-column m-2 bg-white board">
         <div
           className="d-flex flex-row"
@@ -92,9 +68,12 @@ export default function JoinedBoardsPage() {
           className="d-flex flex-column"
           style={{ paddingTop: '52px', paddingLeft: '6vw' }}
         >
-          {getBoards().map((board) => (
-            <BoardTile boardname={board.name} />
-          ))}
+          {boards.length === 0 ? (
+            <BoardTile boardname={'No boards found'} />
+          ) : (
+            boards.map((board) => <BoardTile boardname={board.name} />)
+          )}
+
           <div
             style={{
               border: 'solid #9f9f9f 3px',
@@ -127,7 +106,11 @@ export default function JoinedBoardsPage() {
               }}
             >
               <Button
-                style={{ width: '100px', height: '50px' }}
+                style={{
+                  width: '100px',
+                  height: '50px',
+                  backgroundColor: '#889BFC',
+                }}
                 onClick={joinBoard}
               >
                 Join
@@ -136,6 +119,6 @@ export default function JoinedBoardsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

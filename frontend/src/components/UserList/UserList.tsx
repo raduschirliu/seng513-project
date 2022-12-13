@@ -1,10 +1,9 @@
-import UserTile from "./UserTile"
+import UserTile from './UserTile';
 import { BoardsApi } from '../../api/boards';
 import React, { useState } from 'react';
 import useApi from '../../state/useApi';
 
 export default function UserList() {
-
   const [response, setResponse] = useState<string>('');
   const boardsApi = useApi(BoardsApi);
 
@@ -19,7 +18,7 @@ export default function UserList() {
     console.log(response);
 
     if (response === undefined) {
-      return [{fullname:"Something Broke", id:0}];
+      return [{ fullname: 'Something Broke', id: 0 }];
     }
 
     let lines = response.split('\n');
@@ -32,18 +31,22 @@ export default function UserList() {
         continue;
       }
       temp.push(lines[line].trim());
-
     }
 
     for (let i = 0; i < temp.length; i++) {
       let tempData = temp[i].split(':');
-      let extractedName = tempData[0].replaceAll('\"', '');
+      let extractedName = tempData[0].replaceAll('"', '');
       let extractedId = parseInt(tempData[1]);
-      users.push({fullname:extractedName, id:extractedId});
+      users.push({ fullname: extractedName, id: extractedId });
     }
 
     if (users.length < 1) {
-      return [{fullname:"Something Broke", id:0}, {fullname:"ListLength IsZero", id:1}, {fullname:"Not Working", id:2}, {fullname:"Plz Fix", id:3}];
+      return [
+        { fullname: 'Something Broke', id: 0 },
+        { fullname: 'ListLength IsZero', id: 1 },
+        { fullname: 'Not Working', id: 2 },
+        { fullname: 'Plz Fix', id: 3 },
+      ];
     }
 
     return users;
@@ -51,12 +54,10 @@ export default function UserList() {
 
   return (
     <div>
-      <h2>
-        Board Members
-      </h2>
-        {getUsers().map(user => (
-        <UserTile fullname={user.fullname}/>
-        ))}
+      <h2>Board Members</h2>
+      {getUsers().map((user) => (
+        <UserTile fullname={user.fullname} />
+      ))}
     </div>
   );
 }

@@ -1,199 +1,192 @@
 .taskdescription {
-    background-color: rgba(217, 217, 217, 0.25);
+  background-color: rgba(217, 217, 217, 0.25);
 }
 
 .dialog {
-    display: inline-block;
-    background-color: rgba(217, 217, 217, 0.5);
+  display: inline-block;
+  background-color: rgba(217, 217, 217, 0.5);
 }
 
 .title {
-    font-size: 4ch;
-    font-weight: 400;
-    margin-right: 40px;
-    display: inline-block;
+  font-size: 4ch;
+  font-weight: 400;
+  margin-right: 40px;
+  display: inline-block;
 }
 
 .ylight {
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 4px solid white;
-    background-color: yellow;
-    display: inline-block;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
-
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 4px solid white;
+  background-color: yellow;
+  display: inline-block;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
 }
 
 .rlight {
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 4px solid white;
-    background-color: red;
-    display: inline-block;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
-
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 4px solid white;
+  background-color: red;
+  display: inline-block;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
 }
 
 .glight {
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 4px solid white;
-    background-color: green;
-    display: inline-block;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
-
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 4px solid white;
+  background-color: green;
+  display: inline-block;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
 }
 
 .status {
-    display: inline-block;
+  display: inline-block;
 }
 .statusword {
-    color: grey;
-    display: inline-block;
-    vertical-align: top;
+  color: grey;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .leftdiv {
-    display: inline-block;
-    width: 53%;
+  display: inline-block;
+  width: 53%;
 }
 
 .description {
-    padding: 10px;
-    border-radius: 5px;
-    background-color: white;
-    height: 35ch;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
-    overflow-x: hidden;
-    overflow-y: auto;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: white;
+  height: 35ch;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .comments {
-    float: right;
-    margin-left: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: white;
-    width: 45%;
-    height: 49ch;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
+  float: right;
+  margin-left: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: white;
+  width: 45%;
+  height: 49ch;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
 }
 
 .innercomments {
-    background-color: rgba(217, 217, 217, 0.5);
-    height: 43ch;
-    border-radius: 5px;
+  background-color: rgba(217, 217, 217, 0.5);
+  height: 43ch;
+  border-radius: 5px;
 }
 
 .writebox {
-    height: 6ch;
-    padding: 10px;
-    
+  height: 6ch;
+  padding: 10px;
 }
 
 .commentbox {
-    height: 37ch;
-    padding: 5px;
-    overflow-x: hidden;
-    overflow-y: auto;
+  height: 37ch;
+  padding: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .post {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .comment {
-    display: inline-block;
-    background-color: white;
-    width: fit-content;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 10px;
-    margin-left: 5px;
-    max-width: 85%;
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 4px 12px 0 rgba(0, 0, 0, 0.19);
-
-
+  display: inline-block;
+  background-color: white;
+  width: fit-content;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+  margin-left: 5px;
+  max-width: 85%;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 4px 12px 0 rgba(0, 0, 0, 0.19);
 }
 
 .commentavatar {
-    vertical-align: top;
-    display: inline;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    margin: 5px;
+  vertical-align: top;
+  display: inline;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  margin: 5px;
 }
 
-
 .send {
-    display: inline-block;
-    border-radius: 5px;
-    border-width: 0px;
-    background-color: #889BFC;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: white;
+  display: inline-block;
+  border-radius: 5px;
+  border-width: 0px;
+  background-color: #889bfc;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
 }
 
 .input {
-    display: inline-block;
-    border-radius: 5px;
-    border-width: 0px;
-    height: 35px;
-    width: 80%;
-    float: none;
-    padding: 10px;
-    margin-right: 10px;
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 4px 12px 0 rgba(0, 0, 0, 0.19);
+  display: inline-block;
+  border-radius: 5px;
+  border-width: 0px;
+  height: 35px;
+  width: 80%;
+  float: none;
+  padding: 10px;
+  margin-right: 10px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 4px 12px 0 rgba(0, 0, 0, 0.19);
 }
 
 .assigned {
-    padding: 10px;
-    border-radius: 5px;
-    background-color: white;
-    height: 12ch;
-    margin-top: 20px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
+  padding: 10px;
+  border-radius: 5px;
+  background-color: white;
+  height: 12ch;
+  margin-top: 20px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 4px 18px 0 rgba(0, 0, 0, 0.19);
 }
 
 .assigneddiv {
-    display: inline-block;
+  display: inline-block;
 }
 
 .avatars {
-    display: inline-block;
+  display: inline-block;
 }
 
 .taskavatar {
-    display: inline;
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    margin: 5px;
+  display: inline;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin: 5px;
 }
 
 .atitle {
-    margin: 0px;
+  margin: 0px;
 }
 
-.task-plus-button{
-    display: inline;
-    vertical-align: bottom;
-    margin: 5px;
-    
-    background-color: rgb(201, 201, 201);
-    border-radius: 50%;
-    border: none;
-    height: 50px;
-    width: 50px;
-    justify-content: center;
-    align-items: center;
-  }
+.task-plus-button {
+  display: inline;
+  vertical-align: bottom;
+  margin: 5px;
+
+  background-color: rgb(201, 201, 201);
+  border-radius: 50%;
+  border: none;
+  height: 50px;
+  width: 50px;
+  justify-content: center;
+  align-items: center;
+}
