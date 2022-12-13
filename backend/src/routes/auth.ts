@@ -79,7 +79,7 @@ router.post('/signup', async (req, res) => {
       data.fullName + ' ' + authData.user._id
     }.svg`;
 
-    const newUser = await collections.users().findOneAndUpdate(
+    await collections.users().updateOne(
       {
         _id: authData.user._id,
       },
@@ -91,8 +91,17 @@ router.post('/signup', async (req, res) => {
       }
     );
 
+    const newUser = await collections.users().findOne({
+      _id: authData.user._id,
+    });
+
+    if (!newUser) {
+      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+      return;
+    }
+
     return res.json({
-      user: newUser.value,
+      user: newUser,
       jwt: authData.jwt,
     } as ISignupRespones);
   } catch (err: any) {

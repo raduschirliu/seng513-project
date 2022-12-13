@@ -93,8 +93,6 @@ export default function JoinedBoardsPage() {
               display: 'flex',
               flexDirection: 'row',
               borderRadius: '15px',
-              width: '60vw',
-              height: '100px',
               textAlign: 'left',
             }}
           >
@@ -103,25 +101,23 @@ export default function JoinedBoardsPage() {
                 type="text"
                 placeholder="Enter project code"
                 style={{
-                  height: '60px',
-                  width: '290px',
                   textAlign: 'center',
-                  fontSize: '30px',
                 }}
                 onInput={(e) => updateId(e.currentTarget.value)}
               ></input>
             </div>
             <div
               style={{
-                paddingTop: '22px',
                 marginLeft: 'auto',
-                marginRight: '28px',
+                marginTop: '15px',
+                marginBottom: '15px',
+                marginRight: '15px',
               }}
             >
               <Button
                 style={{
                   width: '100px',
-                  height: '50px',
+                  height: '30px',
                   backgroundColor: '#889BFC',
                 }}
                 onClick={joinBoard}

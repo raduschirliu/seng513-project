@@ -1,19 +1,15 @@
-.tile:not(:hover) {
+.board-tile {
+  cursor: pointer;
   border: solid #9f9f9f 3px;
   border-radius: 15px;
-  width: 60vw;
-  height: 100px;
-  text-align: center;
+  width: 100%;
+  text-align: left;
   cursor: pointer;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
-.tile:hover {
-  cursor: pointer;
+.board-tile:hover {
   background-color: #889bfc;
   border: solid #6d83f3 3px;
-  border-radius: 15px;
-  width: 60vw;
-  height: 110px;
-  padding-top: 5px;
-  text-align: center;
 }
