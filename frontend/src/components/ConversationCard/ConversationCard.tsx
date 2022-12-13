@@ -11,7 +11,9 @@ export default function ConversationCard({ conversation }: IProps) {
 
   return (
     <Card role="button" onClick={() => navigate(`/chat/${conversation._id}`)}>
-      <Card.Body>Users: {conversation.users.join(', ')}</Card.Body>
+      <Card.Body>
+        {conversation.users.map((user) => user.fullName).join(', ')}
+      </Card.Body>
     </Card>
   );
 }

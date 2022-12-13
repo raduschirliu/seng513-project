@@ -26,12 +26,12 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: '/example',
-    element: <ExamplePage />,
-  },
-  {
     path: '/board/:boardId',
-    element: <BoardPage />,
+    element: (
+      <ProtectedPage>
+        <BoardPage />
+      </ProtectedPage>
+    ),
   },
   {
     path: '/chat',
@@ -64,9 +64,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   // <React.StrictMode>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
+  <AuthContextProvider>
+    <RouterProvider router={router} />
+  </AuthContextProvider>
   // </React.StrictMode>
 );
 
