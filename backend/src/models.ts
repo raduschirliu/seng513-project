@@ -12,12 +12,12 @@ export type ISanitizedUser = Omit<IUser, 'passwordHash'>;
 
 export interface IChatMessage extends WithId<Document> {
   message: string;
-  author: string;
+  authorId: ObjectId;
   timestamp: Date;
 }
 
 export interface IChatConversation extends WithId<Document> {
-  users: string[];
+  userIds: ObjectId[];
   messages: IChatMessage[];
 }
 

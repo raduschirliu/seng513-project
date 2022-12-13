@@ -2,14 +2,56 @@ import express from 'express';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ObjectId } from 'mongodb';
-import { collections, db } from '../db';
-import { IChatConversation, IChatMessage } from '../models';
+import { errorResponse, successResponse } from '../api';
+import { verifyAuthToken } from '../auth';
+import { CollectionNames, collections } from '../db';
+import { IChatConversation, IChatMessage, ISanitizedUser } from '../models';
 
 const router = express.Router();
+export default router;
 
-/* Get single conversation by ID */
+type IAggregatedConversation = Omit<IChatConversation, 'userIds'> & {
+  users: ISanitizedUser[];
+};
 
-type IGetConversationsByIdResponse = IChatConversation;
+async function getAggregatedConversations(
+  userId: ObjectId,
+  conversationId: ObjectId | null
+): Promise<IAggregatedConversation[]> {
+  const cursor = collections.conversations().aggregate();
+
+  // Only match a board with ID if specified
+  if (conversationId) {
+    cursor.match({
+      _id: conversationId,
+      userIds: userId,
+    });
+  }
+
+  // Lookup users from userId
+  cursor.lookup({
+    from: CollectionNames.Users,
+    localField: 'userIds',
+    foreignField: '_id',
+    as: 'users',
+  });
+
+  // Remove fields for user/admin IDs, and user sensitive info
+  cursor.project({
+    userIds: 0,
+    'users.passwordHash': 0,
+  });
+
+  const conversations = (await cursor.toArray()) as IAggregatedConversation[];
+  return conversations;
+}
+
+/**************************************************
+ * Get a single conversation by ID
+ **************************************************/
+
+type GetConversationsByIdResponse = IAggregatedConversation;
+
 router.get('/conversations/:id', async (req, res) => {
   const id = req.params.id;
 
@@ -18,73 +60,117 @@ router.get('/conversations/:id', async (req, res) => {
     return;
   }
 
-  const conversationsCollection = collections.conversations();
-  const conversation = await conversationsCollection.findOne({
-    _id: new ObjectId(id),
-  });
-
-  // TODO: Check if user is in conversation before returning
-
-  if (!conversation) {
-    res.sendStatus(StatusCodes.NOT_FOUND);
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
     return;
   }
 
-  return res.json(conversation as IGetConversationsByIdResponse);
+  const conversationId = new ObjectId(id);
+  const conversations = await getAggregatedConversations(
+    userId,
+    conversationId
+  );
+
+  if (conversations.length < 1) {
+    errorResponse(res, 'Conversation does not exist');
+    return;
+  }
+
+  successResponse<GetConversationsByIdResponse>(res, conversations[0]);
 });
 
-/* Create a new conversation */
+/**************************************************
+ * Create a new conversation
+ **************************************************/
 
-type IStartConversationRequest = {
+type StartConversationRequest = {
   userIds: string[];
 };
-type IStartConversationResponse = IChatConversation;
+
+type StartConversationResponse = IAggregatedConversation;
+
 router.post('/conversations', async (req, res) => {
-  const reqData = req.body as IStartConversationRequest;
+  const reqData = req.body as StartConversationRequest;
 
   if (!reqData.userIds || reqData.userIds.length < 1) {
     res.sendStatus(StatusCodes.BAD_REQUEST);
     return;
   }
 
-  const conversationsCollection = collections.conversations();
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
+
+  let userIds: ObjectId[] = [];
+
+  try {
+    userIds = reqData.userIds.map((id) => {
+      return new ObjectId(id);
+    });
+  } catch (err) {
+    console.error('Error converting userIds to strings: ', err);
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  // Add user who requested the chat
+  userIds.push(userId);
 
   const conversation: IChatConversation = {
     _id: new ObjectId(),
     messages: [],
-    // TODO: Add user ID of the user who requested this
-    users: [...reqData.userIds],
+    userIds: userIds,
   };
 
-  await conversationsCollection.insertOne(conversation);
-  res.json(conversation as IStartConversationResponse);
+  await collections.conversations().insertOne(conversation);
+
+  // Request the conversation again to aggregate all users
+  const conversations = await getAggregatedConversations(
+    userId,
+    conversation._id
+  );
+
+  if (conversations.length < 1) {
+    errorResponse(res, 'Conversation does not exist');
+    return;
+  }
+
+  successResponse<StartConversationResponse>(res, conversations[0]);
 });
 
-/* Get all conversations for a user */
+/**************************************************
+ * Get all conversations a user is in
+ **************************************************/
 
-type IGetAllConversationsResponse = IChatConversation[];
+type GetAllConversationsResponse = IAggregatedConversation[];
+
 router.get('/conversations', async (req, res) => {
-  const conversationsCollection = collections.conversations();
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
 
-  // TODO: get this from auth token
-  const userId = 'test-user-id';
-
-  const cursor = conversationsCollection.find({
-    users: userId,
-  });
-
-  const conversations = await cursor.toArray();
-  res.json(conversations as IGetAllConversationsResponse);
+  const conversations = await getAggregatedConversations(userId, null);
+  successResponse<GetAllConversationsResponse>(res, conversations);
 });
 
-/* Send a message in a conversation */
-interface IConversationMessageRequest {
+/**************************************************
+ * Send a message in a conversation
+ **************************************************/
+
+type ConversationMessageRequest = {
   message: string;
-}
-type IConversationMessageResponse = IChatMessage;
+};
+
+type ConversationMessageResponse = IChatMessage;
+
 router.post('/conversations/:conversationId/message', async (req, res) => {
   const conversationId = req.params.conversationId;
-  const bodyData = req.body as IConversationMessageRequest;
+  const bodyData = req.body as ConversationMessageRequest;
 
   if (!bodyData?.message) {
     res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -96,32 +182,30 @@ router.post('/conversations/:conversationId/message', async (req, res) => {
     return;
   }
 
-  const conversationsCollection = collections.conversations();
-  const conversation = await conversationsCollection.findOne({
-    _id: new ObjectId(conversationId),
-  });
-
-  if (!conversation) {
-    res.sendStatus(StatusCodes.NOT_FOUND);
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
     return;
   }
 
-  // TODO: Check if user is in conversation before returning
-  const userId = 'another-user';
-
   const message: IChatMessage = {
     _id: new ObjectId(),
-    author: userId,
+    authorId: userId,
     message: bodyData.message,
     timestamp: new Date(),
   };
 
-  conversationsCollection.updateOne(
-    { _id: conversation._id },
-    { $push: { messages: message } }
-  );
+  const result = await collections
+    .conversations()
+    .updateOne(
+      { _id: new ObjectId(conversationId), userIds: userId },
+      { $push: { messages: message } }
+    );
 
-  return res.json(message as IConversationMessageResponse);
+  if (result.modifiedCount < 1) {
+    errorResponse(res, 'Conversation does not exist');
+    return;
+  }
+
+  successResponse<ConversationMessageResponse>(res, message);
 });
-
-export default router;

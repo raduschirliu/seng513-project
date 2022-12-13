@@ -11,14 +11,16 @@ export default function ChatMessage({ message, sentByMe }: IParams) {
   function MessageBody() {
     return (
       <>
-        <p className="m-0 fw-semibold">{message.author}</p>
+        <p className="m-0 fw-semibold">{message.authorId}</p>
         <Card
           bg={sentByMe ? 'primary' : 'light'}
           text={sentByMe ? 'white' : 'dark'}
         >
           <Card.Body>{message.message}</Card.Body>
         </Card>
-        <p className="m-0 fs-6 fst-italic">Sent {moment(message.timestamp).calendar()}</p>
+        <p className="m-0 fs-6 fst-italic">
+          Sent {moment(message.timestamp).calendar()}
+        </p>
       </>
     );
   }

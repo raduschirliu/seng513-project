@@ -3,24 +3,24 @@ export interface IMongoItem {
 }
 
 export interface IUser extends IMongoItem {
-  name: string;
-  email: string;
+  username: string;
+  fullName: string;
   avatarUrl: string;
 }
 
 export interface IChatMessage extends IMongoItem {
   message: string;
-  author: string;
+  authorId: string;
   timestamp: Date;
 }
 
 export interface IChatConversation extends IMongoItem {
-  users: string[];
+  users: IUser[];
   messages: IChatMessage[];
 }
 
 export interface IComment extends IMongoItem {
-  author: string;
+  authorId: string;
   message: string;
 }
 
@@ -37,3 +37,10 @@ export interface IBoard extends IMongoItem {
   users: string[];
   tasks: ITask[];
 }
+
+export type ApiResponse<T> =
+  | { success: false; error: string }
+  | {
+      success: true;
+      data: T;
+    };

@@ -10,19 +10,22 @@ import {
 } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useInterval } from 'usehooks-ts';
-import { getConversation, sendChatMessage } from '../../api/chat';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import { IChatConversation } from '../../models';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import ThreeColPage from '../../components/Page/ThreeColPage';
+import useApi from '../../state/useApi';
+import { ChatApi } from '../../api/chat';
+import useAuth from '../../state/auth/useAuth';
 
 const CHAT_REFRESH_INTERVAL_MS = 2500;
 
-// TODO: Replace with actual user ID
-const userId = 'test-user-id';
-
 export default function ConversationsPage() {
+  const chatApi = useApi(ChatApi);
+
+  const { user } = useAuth();
+
   const params = useParams();
   const conversationId: string = params.conversationId!;
 
@@ -33,14 +36,22 @@ export default function ConversationsPage() {
   const [currentMessage, setCurrentMessage] = useState<string>('');
 
   const refresh = useCallback(() => {
-    getConversation(conversationId)
-      .then(setConversation)
+    chatApi
+      .getConversation(conversationId)
+      .then((res) => {
+        if (res.success) {
+          setConversation(res.data);
+        } else {
+          console.error('Conversation does not exist!');
+          setConversation(null);
+        }
+      })
       .catch((err) => {
         console.error(err);
         setConversation(null);
       })
       .finally(() => setLoading(false));
-  }, [conversationId]);
+  }, [chatApi, conversationId]);
 
   useInterval(() => {
     refresh();
@@ -48,7 +59,13 @@ export default function ConversationsPage() {
   }, CHAT_REFRESH_INTERVAL_MS);
 
   function sendMessage() {
-    sendChatMessage(conversationId, currentMessage).then((msg) => {
+    chatApi.sendChatMessage(conversationId, currentMessage).then((res) => {
+      if (!res.success) {
+        return;
+      }
+
+      const msg = res.data;
+
       setConversation((prevVal) => {
         if (!prevVal) return null;
 
@@ -70,6 +87,14 @@ export default function ConversationsPage() {
     return <Spinner animation="border" role="status"></Spinner>;
   }
 
+  if (!user) {
+    return (
+      <div>
+        <h1>Not logged in</h1>
+      </div>
+    );
+  }
+
   if (!conversation) {
     return (
       <div>
@@ -86,9 +111,9 @@ export default function ConversationsPage() {
         <Row>
           <h2>Users:</h2>
         </Row>
-        {conversation.users.map((userId) => (
+        {conversation.users.map((user) => (
           <Row>
-            <p key={userId}>{userId}</p>
+            <p key={user._id.toString()}>{user.fullName}</p>
           </Row>
         ))}
       </Container>
@@ -111,7 +136,7 @@ export default function ConversationsPage() {
                 <ChatMessage
                   key={msg._id}
                   message={msg}
-                  sentByMe={msg.author === userId}
+                  sentByMe={msg.authorId === user._id}
                 />
               ))}
             </Stack>

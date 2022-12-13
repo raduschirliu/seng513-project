@@ -1,28 +1,49 @@
-import { IChatConversation, IChatMessage } from '../models';
-import { createApi } from './baseApi';
+import { ApiResponse, IChatConversation, IChatMessage } from '../models';
+import Api from './api';
 
-const api = createApi('/chat');
+export class ChatApi extends Api {
+  constructor() {
+    super('/chat');
+  }
 
-export function getConversations(userId: string) {
-  return api
-    .get('/conversations')
-    .then((res) => res.data as IChatConversation[]);
-}
+  getConversations(): Promise<ApiResponse<IChatConversation[]>> {
+    return this.api
+      .get('/conversations', { headers: this.headers })
+      .then((res) => res.data);
+  }
 
-export function startConversation(participantIds: string) {
-  return api
-    .post('/conversations')
-    .then((res) => res.data as IChatConversation);
-}
+  startConversation(
+    participantIds: string
+  ): Promise<ApiResponse<IChatConversation>> {
+    return this.api
+      .post(
+        '/conversations',
+        {
+          userIds: participantIds,
+        },
+        { headers: this.headers }
+      )
+      .then((res) => res.data);
+  }
 
-export function getConversation(conversationId: string) {
-  return api
-    .get(`/conversations/${conversationId}`)
-    .then((res) => res.data as IChatConversation);
-}
+  getConversation(
+    conversationId: string
+  ): Promise<ApiResponse<IChatConversation>> {
+    return this.api
+      .get(`/conversations/${conversationId}`, { headers: this.headers })
+      .then((res) => res.data);
+  }
 
-export function sendChatMessage(conversationId: string, message: string) {
-  return api
-    .post(`/conversations/${conversationId}/message`, { message })
-    .then((res) => res.data as IChatMessage);
+  sendChatMessage(
+    conversationId: string,
+    message: string
+  ): Promise<ApiResponse<IChatMessage>> {
+    return this.api
+      .post(
+        `/conversations/${conversationId}/message`,
+        { message },
+        { headers: this.headers }
+      )
+      .then((res) => res.data);
+  }
 }

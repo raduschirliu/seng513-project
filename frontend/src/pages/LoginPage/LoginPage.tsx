@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import useAuth from '../../state/auth/useAuth';
+import { Link } from 'react-router-dom';
 
 type LoginFormData = {
   username: string;
@@ -42,6 +43,7 @@ export default function LoginPage() {
       {isLoggedIn() && (
         <Row className="pb-5">
           <Col>
+            <Link to="/chat">Chat</Link>
             <Button onClick={() => logout()}>Logout</Button>
           </Col>
         </Row>
