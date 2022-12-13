@@ -17,7 +17,7 @@ export default function JoinedBoardsPage() {
 
   function getBoards() {
     let temp = [];
-    let test = [];
+    let boards = [];
     boardsApi.getAll().then((data) => {
       setResponse(JSON.stringify(data, null, 2));
     });
@@ -50,10 +50,10 @@ export default function JoinedBoardsPage() {
       let tempData = temp[i].split(':');
       let extractedName = tempData[0].replaceAll('\"', '');
       let extractedId = parseInt(tempData[1]);
-      test.push({name:extractedName, id:extractedId});
+      boards.push({name:extractedName, id:extractedId});
     }
 
-    return test;
+    return boards;
   }
 
   let enteredId = "";
