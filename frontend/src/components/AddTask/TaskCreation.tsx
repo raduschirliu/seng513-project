@@ -87,7 +87,7 @@ export default function AddTaskModal({
                 placeholder="Task description..."
               />
             </Form.Group>
-            <Button variant="primary" style={{backgroundColor:"#889bfc"}} type="submit" className="mt-4">
+            <Button onClick={onClose} style={{backgroundColor:"#889bfc"}} variant="primary" type="submit" className="mt-4">
               Create
             </Button>
           </Form>
