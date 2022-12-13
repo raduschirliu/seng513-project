@@ -4,7 +4,7 @@ import useApi from '../useApi';
 import AuthContext from './AuthContext';
 
 export default function useAuth() {
-  const { state, setState } = useContext(AuthContext);
+  const { state, clearAuth, updateState } = useContext(AuthContext);
   const authApi = useApi(AuthApi);
 
   function isLoggedIn() {
@@ -12,11 +12,7 @@ export default function useAuth() {
   }
 
   function logout() {
-    // TODO: Remove from localstorage
-    setState({
-      user: null,
-      jwt: null,
-    });
+    clearAuth();
   }
 
   function login(username: string, password: string) {
@@ -26,7 +22,7 @@ export default function useAuth() {
         return;
       }
 
-      setState({
+      updateState({
         user: data.user,
         jwt: data.jwt,
       });
@@ -44,7 +40,7 @@ export default function useAuth() {
         return;
       }
 
-      setState({
+      updateState({
         user: data.user,
         jwt: data.jwt,
       });
@@ -53,5 +49,12 @@ export default function useAuth() {
     });
   }
 
-  return { user: state.user, jwt: state.jwt, login, logout, isLoggedIn, signUp };
+  return {
+    user: state.user,
+    jwt: state.jwt,
+    login,
+    logout,
+    isLoggedIn,
+    signUp,
+  };
 }
