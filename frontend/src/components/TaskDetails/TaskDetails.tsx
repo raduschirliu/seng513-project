@@ -1,14 +1,6 @@
 import { Key, useState } from 'react';
-import uuid from 'react-uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faXmark,
-  faTableColumns,
-  faList,
-  faGear,
-  faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Modal, { ModalProps } from 'react-bootstrap/Modal';
 import { IComment, ITask, IUser } from '../../models';
@@ -56,6 +48,7 @@ export default function TaskDetails({
   ...rest
 }: TaskDetailsProps) {
   const [newComments, setNewComments] = useState<IComment[]>([]);
+  const [newAssignedIds, setNewAssignedIds] = useState<string[]>([]);
   const [mycomment, setMyComment] = useState('');
   const tasksApi = useApi(TasksApi);
   const { user } = useAuth();
@@ -79,11 +72,13 @@ export default function TaskDetails({
   };
   const handleAddAssigned = () => {
     if (!user) return;
+    if (task.assignedUserIds.includes(user._id)) return;
 
-    // TODO(radu): API hookup
     tasksApi.update(task._id, {
       assignedUserIds: [...task.assignedUserIds, user._id],
     });
+
+    setNewAssignedIds((prevValue) => [...prevValue, user._id]);
   };
 
   if (!showModal || !task) {
@@ -133,6 +128,18 @@ export default function TaskDetails({
             <h4 className="atitle">Assigned</h4>
             <div className="avatars">
               {task.assignedUserIds.map((user: string, index: Key) => (
+                <img
+                  key={index}
+                  className="taskavatar"
+                  alt="?"
+                  src={
+                    users.find((u: IUser) => {
+                      return u._id === user;
+                    })?.avatarUrl
+                  }
+                ></img>
+              ))}
+              {newAssignedIds.map((user: string, index: Key) => (
                 <img
                   key={index}
                   className="taskavatar"
