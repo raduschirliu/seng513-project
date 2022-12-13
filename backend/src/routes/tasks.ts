@@ -61,18 +61,25 @@ router.patch('/:taskId', async (req, res) => {
     }
   }
 
-  console.log(updates);
-
   const taskId = new ObjectId(req.params.taskId);
   const updateResult = await collections.boards().updateOne(
     {
-      'tasks._id': taskId,
-      $or: [{ userIds: userId }, { adminIds: userId }],
+      $and: [
+        {
+          'tasks._id': taskId,
+        },
+        {
+          $or: [{ userIds: userId }, { adminIds: userId }],
+        },
+      ],
     },
     {
       $set: updates,
-    }
+    },
+    {}
   );
+
+  console.log(updateResult);
 
   if (updateResult.modifiedCount <= 0) {
     errorResponse(res, 'Task does not exist');

@@ -20,11 +20,15 @@ async function getAggregatedConversations(
 ): Promise<IAggregatedConversation[]> {
   const cursor = collections.conversations().aggregate();
 
+  // Only match conversations you are in
+  cursor.match({
+    userIds: userId,
+  });
+
   // Only match a board with ID if specified
   if (conversationId) {
     cursor.match({
       _id: conversationId,
-      userIds: userId,
     });
   }
 

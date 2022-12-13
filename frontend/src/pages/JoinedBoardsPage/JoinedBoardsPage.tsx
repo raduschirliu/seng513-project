@@ -53,9 +53,11 @@ export default function JoinedBoardsPage() {
         }
 
         refreshBoards();
+        setEnteredId('');
       })
       .catch((err) => {
         alert('Please enter a valid board ID');
+        console.log('Error joining board:', err);
       });
   }
 

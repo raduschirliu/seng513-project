@@ -41,9 +41,9 @@ export default function BoardPage() {
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
 
-  const toDoId = uuid();
-  const inProgressId = uuid();
-  const doneId = uuid();
+  const toDoId = 'todo';
+  const inProgressId = 'inprogress';
+  const doneId = 'done';
 
   const onDetailsClose = () => {
     setSelectedTask(null);
@@ -148,7 +148,10 @@ export default function BoardPage() {
       });
 
       const task = getItemById(result.draggableId);
-      modifyTask(task);
+      if (task) {
+        task.status = result.destination.droppableId;
+        modifyTask(task);
+      }
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -164,13 +167,6 @@ export default function BoardPage() {
     }
   };
 
-  const addTask = (task: ITask) => {
-    // TODO: complete
-
-    // Opens a new task window to edit task details
-    // Add task to database
-  }
-
   const modifyTask = (task: ITask) => {
     const taskToSend: Partial<ITask> = {
       status: task.status,
@@ -182,9 +178,8 @@ export default function BoardPage() {
 
   const getTasks = () => {
     // TODO: complete
-    
     // Retrieves tasks from the database/server
-  }
+  };
 
   const viewMyTasksHandler = () => {
     let tasks: ITask[] = [];
@@ -204,7 +199,7 @@ export default function BoardPage() {
     }
 
     categorizeTasks(tasks);
-  }
+  };
 
   return (
     <Page>
