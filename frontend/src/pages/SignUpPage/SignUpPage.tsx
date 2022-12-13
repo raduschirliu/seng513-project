@@ -8,6 +8,7 @@ type SignUpFormData = {
     username: string;
     fullName: string;
     password: string;
+    confirmPassword: string;
 };
 
 export default function SignUpPage() {
@@ -16,6 +17,13 @@ export default function SignUpPage() {
 
     const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
         console.log("Signing up in progress with\n", data);
+
+        if(data.password != data.confirmPassword) {
+            console.log("Mismatch passwords.");
+            alert("Signup failed - Password fields don't match!");
+            return;
+        }
+
         reset();
 
         signUp(data.username, data.fullName, data.password)
@@ -38,23 +46,23 @@ export default function SignUpPage() {
                         A software curated for agile development. Join Today!
                     </p>
                     <ul className="leftHeroFeaturesList">
-                        <li><span>✓</span> Create a project specific board.</li>
-                        <li><span>✓</span> Create &amp; store tasks on a project board.</li>
-                        <li><span>✓</span> Join an exisiting project board through a code.</li>
-                        <li><span>✓</span> Self assign a task &amp;  comment on tasks.</li>
-                        <li><span>✓</span> And so much more!</li>
+                        <li><span className="checkMark">✓</span> Create a project specific board.</li>
+                        <li><span className="checkMark">✓</span> Create &amp; store tasks on a project board.</li>
+                        <li><span className="checkMark">✓</span> Join an exisiting project board through a code.</li>
+                        <li><span className="checkMark">✓</span> Self assign a task &amp;  comment on tasks.</li>
+                        <li><span className="checkMark">✓</span> And so much more!</li>
                     </ul>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="rightHero" action="">
                     <label className="label" htmlFor="email">Username:</label>
-                    <input {...register("username")} className="textbox" type="text" id="email" name="email" /><br /><br />
+                    <input {...register("username", {required: true})} className="textbox" type="text" required/><br /><br />
                     <label className="label" htmlFor="fullName">Full Name:</label>
-                    <input {...register("fullName")} className="textbox" type="text" id="fullName" name="fullName" /><br /><br />
+                    <input {...register("fullName", {required: true})} className="textbox" type="text" required/><br /><br />
                     <label className="label" htmlFor="password">Password:</label>
-                    <input {...register("password")} className="textbox" type="password" id="password" name="password" /><br /><br />
+                    <input {...register("password", {required: true})} className="textbox" type="password" required/><br /><br />
                     <label className="label" htmlFor="confirmPassword">Confirm Password:</label>
-                    <input className="textbox" type="password" id="confirmPassword" name="confirmPassword" /><br /><br />
+                    <input {...register("confirmPassword", {required: true})} className="textbox" type="password" required/><br /><br />
                     <input type="submit" defaultValue="Create" className="createButton" />
                 </form>
             </section>
