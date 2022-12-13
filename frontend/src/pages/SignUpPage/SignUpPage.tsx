@@ -48,13 +48,13 @@ export default function SignUpPage() {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="rightHero" action="">
                     <label className="label" htmlFor="email">Username:</label>
-                    <input {...register("username")} className="textbox" type="text" id="email" name="email" /><br /><br />
+                    <input {...register("username", {required: true})} className="textbox" type="text" /><br /><br />
                     <label className="label" htmlFor="fullName">Full Name:</label>
-                    <input {...register("fullName")} className="textbox" type="text" id="fullName" name="fullName" /><br /><br />
+                    <input {...register("fullName", {required: true})} className="textbox" type="text"/><br /><br />
                     <label className="label" htmlFor="password">Password:</label>
-                    <input {...register("password")} className="textbox" type="password" id="password" name="password" /><br /><br />
+                    <input {...register("password", {required: true})} className="textbox" type="password"/><br /><br />
                     <label className="label" htmlFor="confirmPassword">Confirm Password:</label>
-                    <input className="textbox" type="password" id="confirmPassword" name="confirmPassword" /><br /><br />
+                    <input className="textbox" type="password"/><br /><br />
                     <input type="submit" defaultValue="Create" className="createButton" />
                 </form>
             </section>
