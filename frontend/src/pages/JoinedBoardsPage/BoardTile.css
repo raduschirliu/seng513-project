@@ -1,0 +1,14 @@
+.tile {
+    border: solid #9f9f9f 3px;
+    border-radius: 15px;
+    width: 70vw; 
+    height: 100px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.tile:hover {
+    cursor: pointer;
+    background-color: #889bfc;
+    border: solid #6d83f3 3px;
+}

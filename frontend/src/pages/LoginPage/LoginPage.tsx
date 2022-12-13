@@ -5,6 +5,7 @@ import useAuth from '../../state/auth/useAuth';
 import "./loginStyles.css"
 import logo from "./img/logo.png";
 import { Link } from 'react-router-dom';
+import  { useNavigate } from 'react-router-dom'
 
 type LoginFormData = {
   username: string;
@@ -12,6 +13,8 @@ type LoginFormData = {
 };
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
   const { register, handleSubmit, reset } = useForm<LoginFormData>();
   const { login, logout, user, isLoggedIn } = useAuth();
 
@@ -33,6 +36,7 @@ export default function LoginPage() {
     login(data.username, data.password)
       .then((user) => {
         console.log('Logged in: ', user);
+        navigate('/yourprojects');
       })
       .catch((err) => alert('Failed to log in: ' + err));
   };

@@ -14,6 +14,7 @@ import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
 import AddTask from '../../components/AddTask/TaskCreation';
+import UserList from '../../components/UserList/UserList'
 
 export interface ColumnInfo{
   name: string;
@@ -240,6 +241,11 @@ export default function BoardPage() {
           {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
         </div >
       </div >
+      <div style={{width: "19%", minWidth: "265px", paddingLeft: "0.5vw", paddingTop: "12px"}}>
+        <div>
+          <UserList/>
+        </div>
+      </div>
     </div >
   );
 }
