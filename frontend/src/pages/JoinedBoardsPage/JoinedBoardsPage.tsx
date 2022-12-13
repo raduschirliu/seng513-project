@@ -16,6 +16,7 @@ import useApi from '../../state/useApi';
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../state/auth/useAuth';
 import { IBoard } from '../../models';
+import Page from '../../components/Page/Page';
 
 export default function JoinedBoardsPage() {
   const { user } = useAuth();
@@ -52,33 +53,7 @@ export default function JoinedBoardsPage() {
   }
 
   return (
-    <div className="d-flex bg-light page">
-      {/* <p>ID from URL is: {params.boardId}</p> */}
-      <div className="d-flex flex-column justify-content-between m-2 nav-bar bg-white">
-        <Logo />
-
-        <div className="d-flex flex-column mx-2 my-5"></div>
-
-        <div className="d-flex flex-column mx-2 my-5">
-          <h6>
-            <b>Account</b>
-          </h6>
-          <ul>
-            <li className="nav-element cur-element">
-              <FontAwesomeIcon icon={faUserGroup} /> Projects
-            </li>
-            <li className="nav-element">
-              <FontAwesomeIcon icon={faGear} /> Settings
-            </li>
-          </ul>
-        </div>
-
-        <div className="d-flex flex-row mx-2 avatar-container">
-          <img className="avatar" src={user!.avatarUrl} />
-          <p>{user!.fullName}</p>
-        </div>
-      </div>
-
+    <Page>
       <div className="d-flex flex-column m-2 bg-white board">
         <div
           className="d-flex flex-row"
@@ -144,6 +119,6 @@ export default function JoinedBoardsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

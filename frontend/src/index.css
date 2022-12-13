@@ -102,7 +102,7 @@ code {
   background-color: white;
 }
 
-.button-container{
+.button-container {
   margin: 0 2em;
 }
 
@@ -148,6 +148,7 @@ code {
 }
 
 .nav-element {
+  text-decoration: none;
   cursor: pointer;
 }
 

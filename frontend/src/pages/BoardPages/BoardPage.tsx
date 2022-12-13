@@ -1,27 +1,19 @@
 //@ts-nocheck
 import { useParams } from 'react-router-dom';
-import Logo from '../../assets/Logo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faTableColumns,
-  faList,
-  faGear,
-  faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DropResult } from 'react-beautiful-dnd';
 import { useState, useEffect, useCallback } from 'react';
-import { useInterval } from 'usehooks-ts';
 import TaskArea from './TaskArea';
 import uuid from 'react-uuid';
-import { IUser, ITask, IBoard } from '../../models';
+import { ITask, IBoard } from '../../models';
 import useAuth from '../../state/auth/useAuth';
 import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
 import AddTaskModal from '../../components/AddTask/TaskCreation';
-import UserList from '../../components/UserList/UserList';
+import Page from '../../components/Page/Page';
 
 export interface ColumnInfo {
   name: string;
@@ -207,71 +199,62 @@ export default function BoardPage() {
   }
 
   return (
-    <div className="d-flex bg-light page">
-      {/* <p>ID from URL is: {params.boardId}</p> */}
-      <div className="d-flex flex-column justify-content-between m-2 nav-bar bg-white">
-        <Logo />
+    <Page>
+      <div className="d-flex board-page-header p-2 mx-4 my-2">
+        <h1>{board.name}</h1>
 
-        <div className="d-flex flex-column mx-2 my-5">
-          <h6>
-            <b>Your project</b>
-          </h6>
-          <ul>
-            <li className="nav-element cur-element">
-              <FontAwesomeIcon icon={faTableColumns} /> Dashboard
-            </li>
-            <li className="nav-element">
-              <FontAwesomeIcon icon={faList} /> Backlog
-            </li>
-          </ul>
-        </div>
-
-        <div className="d-flex flex-column mx-2 my-5">
-          <h6>
-            <b>Account</b>
-          </h6>
-          <ul>
-            <li className="nav-element">
-              <FontAwesomeIcon icon={faUserGroup} /> Projects
-            </li>
-            <li className="nav-element">
-              <FontAwesomeIcon icon={faGear} /> Settings
-            </li>
-          </ul>
-        </div>
-
-        <div className="d-flex flex-row mx-2 avatar-container">
-          <div className="avatar">{user!.fullName[0]}</div>
-          <p>{user!.fullName}</p>
-        </div>
+        <button
+          type="button"
+          className="plus-button"
+          onClick={() => setShowAddTaskModal(true)}
+        >
+          <FontAwesomeIcon className="plus-icon" icon={faPlus} />
+        </button>
       </div>
 
-      <div className="d-flex m-2 flex-column bg-white board">
-        <div className="d-flex board-page-header p-2 mx-4 my-2">
-          <h1>{board.name}</h1>
-
-          <button type="button" className="plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
-        </div>
-
-        <div className="d-flex button-container w-100 mw-100">
-          <button
-            type="button"
-            style={{ backgroundColor: viewMyTasks ? '#5772fb' : '#889BFC' }}
-            onClick={() => viewMyTasksHandler()}
-          >
-            {viewMyTasks ? 'View All Tasks' : 'View My Tasks'}
-          </button>
-        </div>
-
-        <div className='d-flex w-100 mw-100 task-column-container'>
-          {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
-        </div >
-      </div >
-      <div style={{width: "19%", minWidth: "265px", paddingLeft: "0.5vw", paddingTop: "12px"}}>
-        <div>
-          <UserList/>
-        </div>
+      <div className="d-flex button-container w-100 mw-100">
+        <button
+          type="button"
+          style={{ backgroundColor: viewMyTasks ? '#5772fb' : '#889BFC' }}
+          onClick={() => viewMyTasksHandler()}
+        >
+          {viewMyTasks ? 'View All Tasks' : 'View My Tasks'}
+        </button>
       </div>
-    </div >
+
+      <div className="d-flex w-100 mw-100 task-column-container">
+        {board ? (
+          <TaskArea
+            columns={columns}
+            onDragEnd={onDragEnd}
+            boardusers={[...board.users, ...board.admins]}
+            me={user}
+            onTaskSelected={onTaskSelected}
+          />
+        ) : (
+          <TaskArea
+            columns={columns}
+            onDragEnd={onDragEnd}
+            boardusers={[...board.users, ...board.admins]}
+            me={user}
+            onTaskSelected={onTaskSelected}
+          />
+        )}
+
+        <TaskDetails
+          showModal={!!selectedTask}
+          task={selectedTask}
+          users={[...board.users, ...board.admins]}
+          onHide={onDetailsClose}
+        />
+      </div>
+
+      <AddTaskModal
+        boardId={board._id}
+        show={showAddTaskModal}
+        onTaskAdded={() => refresh()}
+        onClose={() => setShowAddTaskModal(false)}
+      />
+    </Page>
   );
 }

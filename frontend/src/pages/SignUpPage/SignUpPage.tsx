@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useAuth from '../../state/auth/useAuth';
 import './styles.css';
-import logo from './img/logo.png';
+import logo from '../../assets/img/logo.png';
 
 type SignUpFormData = {
   username: string;
@@ -18,7 +18,7 @@ export default function SignUpPage() {
   const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
     console.log('Signing up in progress with\n', data);
 
-    if (data.password != data.confirmPassword) {
+    if (data.password !== data.confirmPassword) {
       console.log('Mismatch passwords.');
       alert("Signup failed - Password fields don't match!");
       return;

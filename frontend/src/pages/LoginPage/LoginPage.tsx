@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import useAuth from '../../state/auth/useAuth';
 import './loginStyles.css';
-import logo from './img/logo.png';
+import logo from '../../assets/img/logo.png';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,17 +16,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const { register, handleSubmit, reset } = useForm<LoginFormData>();
-  const { login, logout, user, isLoggedIn } = useAuth();
-
-  const [status, setStatus] = useState<string>('Not logged in');
-
-  useEffect(() => {
-    if (user) {
-      setStatus(`Logged in as ${user.username}`);
-    } else {
-      setStatus('Not logged in');
-    }
-  }, [user]);
+  const { login, isLoggedIn } = useAuth();
 
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
     // Clear form and send log in request
@@ -36,21 +26,15 @@ export default function LoginPage() {
     login(data.username, data.password)
       .then((user) => {
         console.log('Logged in: ', user);
-        navigate('/yourprojects');
+        navigate('/app/boards');
       })
       .catch((err) => alert('Failed to log in: ' + err));
   };
-
-  function handleCreateAccount() {
-    let path = '/signup';
-  }
 
   return (
     <div>
       <nav className="login-navBarContainer">
         <h1 className="login-navBarTitle">Log In</h1>
-        {/* <p>Status: {status}</p>
-        {isLoggedIn() && <Button onClick={() => logout()}>Logout</Button> } */}
       </nav>
       <section className="login-heroSection">
         <div className="login-leftHero">
