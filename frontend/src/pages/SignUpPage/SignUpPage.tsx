@@ -8,6 +8,7 @@ type SignUpFormData = {
     username: string;
     fullName: string;
     password: string;
+    confirmPassword: string;
 };
 
 export default function SignUpPage() {
@@ -16,6 +17,13 @@ export default function SignUpPage() {
 
     const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
         console.log("Signing up in progress with\n", data);
+
+        if(data.password != data.confirmPassword) {
+            console.log("Mismatch passwords.");
+            alert("Signup failed - Password fields don't match!");
+            return;
+        }
+
         reset();
 
         signUp(data.username, data.fullName, data.password)
@@ -54,7 +62,7 @@ export default function SignUpPage() {
                     <label className="label" htmlFor="password">Password:</label>
                     <input {...register("password", {required: true})} className="textbox" type="password"/><br /><br />
                     <label className="label" htmlFor="confirmPassword">Confirm Password:</label>
-                    <input className="textbox" type="password"/><br /><br />
+                    <input {...register("confirmPassword", {required: true})} className="textbox" type="password"/><br /><br />
                     <input type="submit" defaultValue="Create" className="createButton" />
                 </form>
             </section>
