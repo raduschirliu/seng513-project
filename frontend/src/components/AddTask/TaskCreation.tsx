@@ -1,7 +1,6 @@
-import { Key, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Button, Modal, Form, ModalTitle, ModalProps } from 'react-bootstrap';
+import { Button, Modal, Form, ModalProps } from 'react-bootstrap';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './taskcreationstyle.css';
 import { ITask } from '../../models';
@@ -20,7 +19,7 @@ export type AddTaskModalProps = ModalProps & {
   onClose: () => void;
 };
 
-export function AddTaskModal({
+export default function AddTaskModal({
   boardId,
   show,
   onTaskAdded,

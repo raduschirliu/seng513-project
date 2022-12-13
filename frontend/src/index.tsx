@@ -2,7 +2,6 @@
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -16,6 +15,8 @@ import JoinedBoardsPage from './pages/JoinedBoardsPage/JoinedBoardsPage';
 import AppRoot from './components/AppRoot/AppRoot';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import BoardUserList from './pages/BoardPages/BoardUserList';
+import { NavContextProvider } from './state/nav/NavContextProvider';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
 
 const router = createBrowserRouter([
   // Signup and login routes do not need to be protected
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         path: '/app/chat/:conversationId',
         element: <ConversationPage />,
       },
+      {
+        path: '/app/settings',
+        element: <SettingsPage />,
+      },
 
       // 404 Page for /app sub-route
       {
@@ -77,11 +82,13 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
+  //<React.StrictMode>
+  <AuthContextProvider>
+    <NavContextProvider>
       <RouterProvider router={router} />
-    </AuthContextProvider>
-  </React.StrictMode>
+    </NavContextProvider>
+  </AuthContextProvider>
+  //</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

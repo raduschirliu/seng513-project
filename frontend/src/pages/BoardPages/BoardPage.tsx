@@ -1,14 +1,7 @@
 //@ts-nocheck
 import { useParams } from 'react-router-dom';
-import Logo from '../../assets/Logo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPlus,
-  faTableColumns,
-  faList,
-  faGear,
-  faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DropResult } from 'react-beautiful-dnd';
 import { useState, useEffect, useCallback } from 'react';
 import TaskArea from './TaskArea';
@@ -19,9 +12,8 @@ import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
-import { AddTaskModal } from '../../components/AddTask/TaskCreation';
+import AddTaskModal from '../../components/AddTask/TaskCreation';
 import Page from '../../components/Page/Page';
-import UserList from '../../components/UserList/UserList';
 
 export interface ColumnInfo {
   name: string;

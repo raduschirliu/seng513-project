@@ -139,6 +139,7 @@ code {
 }
 
 .nav-element {
+  text-decoration: none;
   cursor: pointer;
 }
 
