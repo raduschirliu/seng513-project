@@ -50,7 +50,7 @@ export default function CreateBoardModal() {
                     style={{ maxWidth: '400px' }}
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" style={{backgroundColor: "#889bfc", border: "none"}}>
                   Create Board
                 </Button>
               </Form>
