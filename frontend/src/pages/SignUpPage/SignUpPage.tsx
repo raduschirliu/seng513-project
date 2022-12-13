@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import useAuth from '../../state/auth/useAuth';
 import './styles.css';
 import logo from '../../assets/img/logo.png';
+import { useNavigate } from 'react-router-dom';
 
 type SignUpFormData = {
   username: string;
@@ -14,6 +15,7 @@ type SignUpFormData = {
 export default function SignUpPage() {
   const { register, handleSubmit, reset } = useForm<SignUpFormData>();
   const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
     console.log('Signing up in progress with\n', data);
@@ -29,6 +31,7 @@ export default function SignUpPage() {
     signUp(data.username, data.fullName, data.password)
       .then((user) => {
         console.log('Signed up successfully as: ', user);
+        navigate('/app/boards');
       })
       .catch((err) => alert('Error signing up: ' + err));
   };
