@@ -1,26 +1,36 @@
-import React from 'react';
-import Logo from '../../assets/Logo';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
+import { ChatApi } from '../../api/chat';
+import { IUser } from '../../models';
+import useApi from '../../state/useApi';
 import './UserList.css';
 
-interface Props {
-  fullname: string;
+export interface Props {
+  user: IUser;
+  hideStartChat?: boolean;
 }
 
-const UserTile: React.FC<Props> = ({ fullname }) => {
+export default function UserTile({ user, hideStartChat }: Props) {
+  const chatApi = useApi(ChatApi);
+  const navigate = useNavigate();
+
+  const startChat = () => {
+    chatApi.startConversation([user._id]).then((res) => {
+      if (!res.success) {
+        console.error('Failed to create chat', res.error);
+        return;
+      }
+
+      navigate(`/app/chat/${res.data._id}`);
+    });
+  };
+
   return (
     <div style={{ paddingRight: '13px', paddingTop: '6px' }}>
       <div className="tile">
-        {/* TODO: Get and use avatar url from api */}
         <div className="avatar-container">
           <div className="avatar">
-            <h1
-              style={{
-                fontSize: 'calc(12px + 1vw)',
-                paddingTop: 'calc(1px + 0.05vw)',
-              }}
-            >
-              {fullname.charAt(0)}
-            </h1>
+            <img src={user.avatarUrl} alt="User avatar" />
           </div>
         </div>
         <h3
@@ -30,11 +40,10 @@ const UserTile: React.FC<Props> = ({ fullname }) => {
             fontSize: 'calc(10px + 0.4vw)',
           }}
         >
-          {fullname}
+          {user.fullName}
         </h3>
+        {!hideStartChat && <Button onClick={() => startChat()}>Chat</Button>}
       </div>
     </div>
   );
-};
-
-export default UserTile;
+}
