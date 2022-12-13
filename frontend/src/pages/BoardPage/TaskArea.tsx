@@ -1,10 +1,6 @@
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { ITask, IUser } from '../../models';
-import { Column, ColumnInfo } from './BoardPage';
-import TaskDetails from '../../components/TaskDetails/TaskDetails';
-import { TestApi } from '../../api/test';
-import { TasksApi } from '../../api/tasks';
-import { useCallback, useState } from 'react';
+import { Column } from './BoardPage';
 
 export default function TaskArea(props: {
   columns: Column;

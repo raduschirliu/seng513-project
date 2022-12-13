@@ -19,9 +19,8 @@ import useAuth from '../../state/auth/useAuth';
 import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
-import AddTask from '../../components/AddTask/TaskCreation';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
-import { TestApi } from '../../api/test';
+import { AddTaskModal } from '../../components/AddTask/TaskCreation';
 
 export interface ColumnInfo {
   name: string;
@@ -47,6 +46,7 @@ export default function BoardPage() {
   const [board, setBoard] = useState(defaultBoard);
   const [viewMyTasks, setViewMyTasks] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
 
   const toDoId = uuid();
   const inProgressId = uuid();
@@ -163,14 +163,6 @@ export default function BoardPage() {
     }
   };
 
-  const addTask = (task: ITask) => {
-    // TODO: complete
-
-    // Opens a new task window to edit task details
-    // Add task to database
-    <AddTask></AddTask>;
-  };
-
   const modifyTask = (task: ITask) => {
     const taskToSend: Partial<ITask> = {
       status: task.status,
@@ -186,11 +178,6 @@ export default function BoardPage() {
 
   const onDetailsClose = () => {
     setSelectedTask(false);
-  };
-
-  const getTasks = () => {
-    // TODO: complete
-    // Retrieves tasks from the database/server
   };
 
   const viewMyTasksHandler = () => {
@@ -261,7 +248,11 @@ export default function BoardPage() {
         <div className="d-flex board-page-header p-2 mx-4 my-2">
           <h1>{board.name}</h1>
 
-          <button type="button" className="plus-button">
+          <button
+            type="button"
+            className="plus-button"
+            onClick={() => setShowAddTaskModal(true)}
+          >
             <FontAwesomeIcon className="plus-icon" icon={faPlus} />
           </button>
         </div>
@@ -303,6 +294,13 @@ export default function BoardPage() {
           />
         </div>
       </div>
+
+      <AddTaskModal
+        boardId={board._id}
+        show={showAddTaskModal}
+        onTaskAdded={() => refresh()}
+        onClose={() => setShowAddTaskModal(false)}
+      />
     </div>
   );
 }
