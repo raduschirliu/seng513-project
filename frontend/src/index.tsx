@@ -15,7 +15,7 @@ import ConversationsListPage from './pages/ChatPages/ConversationsListPage';
 import ConversationPage from './pages/ChatPages/ConversationPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import ProtectedPage from './pages/ProtectedPage/ProtectedPage';
-import CreateBoardPage from './pages/CreateBoardPage/CreateBoardPage';
+import JoinedBoardsPage from './pages/JoinedBoardsPage/JoinedBoardsPage';
 
 const router = createBrowserRouter([
   {
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/createboard',
-    element: <CreateBoardPage />,
+    element: <JoinedBoardsPage />,
   },
   {
     path: '/chat',
