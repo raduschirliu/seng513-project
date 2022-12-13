@@ -45,6 +45,14 @@ export default function BoardPage() {
   const inProgressId = uuid();
   const doneId = uuid();
 
+  const onDetailsClose = () => {
+    setSelectedTask(null);
+  };
+
+  const onTaskSelected = (task: ITask) => {
+    setSelectedTask(task);
+  };
+
   const { boardId } = useParams<string>();
 
   const cols = {
