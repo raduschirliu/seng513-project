@@ -14,7 +14,7 @@ export default function SettingsPage() {
 
   return (
     <Page>
-      <Button onClick={onClickLogout}>Logout</Button>
+      <Button onClick={onClickLogout} className='m-4'>Logout</Button>
     </Page>
   );
 }

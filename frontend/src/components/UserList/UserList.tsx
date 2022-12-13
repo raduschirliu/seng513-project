@@ -10,7 +10,7 @@ export type Props = {
 export default function UserList({ title, users, currentUser }: Props) {
   return (
     <div>
-      <h1>{title}</h1>
+      <h1 className='p-2 m-2'>{title}</h1>
       <div>
         {users.map((user) => (
           <UserTile

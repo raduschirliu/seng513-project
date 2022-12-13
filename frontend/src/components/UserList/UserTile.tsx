@@ -26,8 +26,8 @@ export default function UserTile({ user, hideStartChat }: Props) {
   };
 
   return (
-    <div style={{ paddingRight: '13px', paddingTop: '6px' }}>
-      <div className="tile">
+    <div className='p-2 m-2'>
+      <div className="tile align-items-center p-2">
         <div className="avatar-container">
           <div className="avatar">
             <img src={user.avatarUrl} alt="User avatar" />
