@@ -12,6 +12,7 @@ import ExamplePage from './pages/ExamplePage/ExamplePage';
 import BoardPage from './pages/BoardPage/BoardPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import ProtectedPage from './pages/ProtectedPage/ProtectedPage';
+import CreateBoardPage from './pages/CreateBoardPage/CreateBoardPage';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: '/board/:boardId',
     element: <BoardPage />,
+  },
+  {
+    path: '/createboard',
+    element: <CreateBoardPage />,
   },
   {
     path: '/login',

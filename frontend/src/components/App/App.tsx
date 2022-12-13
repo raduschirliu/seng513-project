@@ -21,6 +21,7 @@ export default function App() {
 
         <Link to="/example">Example</Link>
         <Link to="/board/123">Board</Link>
+        <Link to="/createboard">CreateBoard</Link>
       </header>
     </div>
   );
