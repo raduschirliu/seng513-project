@@ -4,6 +4,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import useAuth from '../../state/auth/useAuth';
 import "./loginStyles.css"
 import logo from "./img/logo.png";
+import { Link } from 'react-router-dom';
 
 type LoginFormData = {
   username: string;
@@ -35,6 +36,10 @@ export default function LoginPage() {
       })
       .catch((err) => alert('Failed to log in: ' + err));
   };
+
+  function handleCreateAccount() {
+    let path = '/signup';
+  }
 
   return (
     <div>
@@ -68,7 +73,9 @@ export default function LoginPage() {
           <div className="login-createAccountContainer">
           <hr></hr>
           <p className="login-createAccountText">Don't have an account yet?</p>
-          <input type="button" defaultValue="Create an account" className="login-createAccountButton" />
+          <Link to={'/signup'}>
+            <button className="login-createAccountButton">Create an account</button>
+          </Link>
           </div>
         </form>
       </section>
