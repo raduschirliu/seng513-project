@@ -35,7 +35,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/createboard',
+    path: '/yourprojects',
     element: <JoinedBoardsPage />,
   },
   {

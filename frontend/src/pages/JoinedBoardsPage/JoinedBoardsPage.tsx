@@ -16,7 +16,7 @@ export default function JoinedBoardsPage() {
   const boardsApi = useApi(BoardsApi);
 
   function getBoards() {
-    let users = [];
+    let temp = [];
     let test = [];
     boardsApi.getAll().then((data) => {
       setResponse(JSON.stringify(data, null, 2));
@@ -38,12 +38,16 @@ export default function JoinedBoardsPage() {
         continue;
       }
     //console.log("Pushing user: " + lines[line]);
-    users.push(lines[line].trim());
+    temp.push(lines[line].trim());
 
     }
 
-    for (let i = 0; i < users.length; i++) {
-      let tempData = users[i].split(':');
+    if (temp.length < 1) {
+      return [{name:"Something Broke", id:0}, {name:"No Boards Found", id:0}];
+    }
+
+    for (let i = 0; i < temp.length; i++) {
+      let tempData = temp[i].split(':');
       let extractedName = tempData[0].replaceAll('\"', '');
       let extractedId = parseInt(tempData[1]);
       test.push({name:extractedName, id:extractedId});
@@ -107,7 +111,7 @@ export default function JoinedBoardsPage() {
           {getBoards().map(board => (
             <BoardTile boardname={board.name}/>
           ))}
-          <div style={{border: 'solid #565656 3px', display: "flex", flexDirection: "row", borderRadius: "15px", width: "70vw", height: "100px", textAlign: "left"}}>
+          <div style={{border: 'solid #9f9f9f 3px', display: "flex", flexDirection: "row", borderRadius: "15px", width: "70vw", height: "100px", textAlign: "left"}}>
         <div style={{paddingTop: "15px", paddingLeft: "20px"}}>
           <input type="text" placeholder="Enter project code" style={{height: "60px", width: "290px", textAlign: "center", fontSize: "30px"}} onInput={e => updateId(e.currentTarget.value)}></input>
         </div>

@@ -1,0 +1,16 @@
+.tile {
+    background-color: white;
+    display: flex;
+    border: solid 10px white; 
+    border-radius: 15px;
+}
+
+.tile:hover {
+    cursor: pointer;
+    background-color: #bacef6;
+}
+
+.avatar {
+    width: calc(25px + 1.0vw);
+    height: calc(25px + 1.0vw);
+}

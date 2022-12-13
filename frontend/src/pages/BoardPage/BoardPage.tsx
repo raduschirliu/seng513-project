@@ -14,6 +14,7 @@ import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
 import AddTask from '../../components/AddTask/TaskCreation';
+import UserList from '../../components/UserList/UserList'
 
 export interface ColumnInfo{
   name: string;

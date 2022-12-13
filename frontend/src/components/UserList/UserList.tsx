@@ -9,8 +9,9 @@ export default function UserList() {
   const boardsApi = useApi(BoardsApi);
 
   function getUsers() {
+    let temp = [];
     let users = [];
-    let test = [];
+    // TODO replace '123' with real board id
     boardsApi.userList('123').then((data) => {
       setResponse(JSON.stringify(data, null, 2));
     });
@@ -30,24 +31,29 @@ export default function UserList() {
       if (lines[line].includes('{') || lines[line].includes('}')) {
         continue;
       }
-    //console.log("Pushing user: " + lines[line]);
-    users.push(lines[line].trim());
+      temp.push(lines[line].trim());
 
     }
 
-    for (let i = 0; i < users.length; i++) {
-      let tempData = users[i].split(':');
+    for (let i = 0; i < temp.length; i++) {
+      let tempData = temp[i].split(':');
       let extractedName = tempData[0].replaceAll('\"', '');
       let extractedId = parseInt(tempData[1]);
-      test.push({fullname:extractedName, id:extractedId});
+      users.push({fullname:extractedName, id:extractedId});
     }
 
-    return test;
+    if (users.length < 1) {
+      return [{fullname:"Something Broke", id:0}, {fullname:"ListLength IsZero", id:1}, {fullname:"Not Working", id:2}, {fullname:"Plz Fix", id:3}];
+    }
+
+    return users;
   }
 
-    //console.log(getUsers());
   return (
     <div>
+      <h2>
+        Board Members
+      </h2>
         {getUsers().map(user => (
         <UserTile fullname={user.fullname}/>
         ))}

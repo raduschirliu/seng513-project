@@ -1,5 +1,6 @@
 import React from "react"
 import Logo from '../../assets/Logo';
+import './UserList.css'
 
 interface Props {
     fullname: string;
@@ -9,9 +10,10 @@ const UserTile: React.FC<Props> = ({ fullname }) => {
 
     return (
       <div style={{paddingRight: "13px", paddingTop: "6px"}}>
-        <div style={{display: "flex", backgroundColor: "white", border: 'solid 10px white', borderRadius: "15px",  cursor: "pointer"}}>
+        <div className="tile">
+            {/* TODO: Get and use avatar url from api */}
             <div className='avatar-container'>
-                <div className="avatar" style={{width: 'calc(25px + 1vw)', height: 'calc(25px + 1vw)'}}>
+                <div className="avatar">
                     <h1 style={{fontSize: 'calc(12px + 1vw)', paddingTop: 'calc(1px + 0.05vw)'}}>{fullname.charAt(0)}</h1>
                 </div>
             </div>
