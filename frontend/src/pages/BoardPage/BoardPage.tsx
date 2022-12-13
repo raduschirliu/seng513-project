@@ -241,11 +241,6 @@ export default function BoardPage() {
           {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
         </div >
       </div >
-      <div style={{width: "19%", minWidth: "265px", paddingLeft: "0.5vw", paddingTop: "12px"}}>
-        <div>
-          <UserList/>
-        </div>
-      </div>
     </div >
   );
 }

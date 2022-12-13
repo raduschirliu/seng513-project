@@ -36,7 +36,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/yourprojects',
-    element: <JoinedBoardsPage />,
+    element: (
+      <ProtectedPage>
+        <JoinedBoardsPage />
+      </ProtectedPage>
+    ),
+    
   },
   {
     path: '/chat',

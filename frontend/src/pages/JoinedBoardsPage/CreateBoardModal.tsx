@@ -31,7 +31,7 @@ const onSubmit: SubmitHandler<CreateBoardFormData> = (data) => {
   return (
 
     <>
-      <Button variant="primary" onClick={handleShow} className="plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus}/></Button>
+      <button type="button" onClick={handleShow} className="plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
