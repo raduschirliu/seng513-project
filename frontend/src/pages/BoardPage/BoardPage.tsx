@@ -21,6 +21,8 @@ import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
 import { AddTaskModal } from '../../components/AddTask/TaskCreation';
+import AddTask from '../../components/AddTask/TaskCreation';
+import UserList from '../../components/UserList/UserList';
 
 export interface ColumnInfo {
   name: string;
@@ -292,6 +294,19 @@ export default function BoardPage() {
             users={[...board.users, ...board.admins]}
             onHide={onDetailsClose}
           />
+        </div>
+      </div>
+
+      <div
+        style={{
+          width: '19%',
+          minWidth: '265px',
+          paddingLeft: '0.5vw',
+          paddingTop: '12px',
+        }}
+      >
+        <div>
+          <UserList />
         </div>
       </div>
 

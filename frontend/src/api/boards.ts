@@ -1,4 +1,4 @@
-import { ApiResponse, IBoard, ITask } from '../models';
+import { ApiResponse, IBoard, ITask, IUser } from '../models';
 import Api from './api';
 
 export class BoardsApi extends Api {
@@ -31,6 +31,18 @@ export class BoardsApi extends Api {
       .then((res) => res.data);
   }
 
+  createBoard(boardname: string, adminId: string): Promise<ApiResponse<IBoard>> {
+    return this.api
+      .post(
+        '/create',
+        {
+          boardname, adminId
+        },
+        { headers: this.headers }
+      )
+      .then((res) => res.data);
+  }
+
   join(boardId: string): Promise<ApiResponse<{}>> {
     return this.api
       .post(`/${boardId}/join`, {}, { headers: this.headers })
@@ -51,5 +63,15 @@ export class BoardsApi extends Api {
         headers: this.headers,
       })
       .then((res) => res.data);
+  }
+
+  userList(boardId: string): Promise<ApiResponse<IUser>> {
+    return this.api
+      //.get(`/${boardId}/list-users`,{
+      //  headers: this.headers,
+      //}).then((res) => res.data);
+      .get('/list-users',{
+        headers: this.headers,
+      }).then((res) => res.data);
   }
 }
