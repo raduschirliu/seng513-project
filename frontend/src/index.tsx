@@ -26,6 +26,10 @@ const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
+    path: '/example',
+    element: <ExamplePage />,
+  },
+  {
     path: '/board/:boardId',
     element: (
       <ProtectedPage>

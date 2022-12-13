@@ -12,12 +12,13 @@ import { TasksApi } from '../../api/tasks';
 function MyVerticallyCenteredModal(props: any) {
 
   const [comments, setComments] = useState(props.task.comments);
-  const [assigned, setAssigned] = useState(props.task.assigned);
+  const [assigned, setAssigned] = useState(props.task.assignedUserIds);
   const [users, s] = useState(props.users);
   const [me, a] = useState(props.me);
   const [mycomment, setMyComment] = useState("");
   const [api, b] = useState(props.api);
 
+  //TO-DO: implement api calls with the handlers below
   const handleSubmit = (event: any) => {
     event.preventDefault();
     handleMakeComment();
@@ -26,16 +27,16 @@ function MyVerticallyCenteredModal(props: any) {
   const handleMakeComment = () => {
     setComments((prevComments: IComment[]) => [
       ...prevComments,
-      {_id:0,authorId:me.username,message:mycomment}
+      {_id:"99",authorId:me._id,message:mycomment}
       
 
     ]);
   }
   const handleAddAssigned = () => {
-    if(!assigned.some((item: string) => me.username === item)) {
+    if(!assigned.some((item: string) => me._id === item)) {
       setAssigned((prevAssigned: string[]) => [
         ...prevAssigned,
-            me.username
+            me._id
       ]);
     }
   }
@@ -81,7 +82,7 @@ function MyVerticallyCenteredModal(props: any) {
             <div className='avatars'>
               {
                 assigned.map((user: string, index: Key) => (
-                    <img key={index} className='taskavatar' alt='?' src={users.find((u: IUser) => {return u.username === user;}).avatarUrl}></img>
+                    <img key={index} className='taskavatar' alt='?' src={users.find((u: IUser) => {return u._id === user;}).avatarUrl}></img>
                 ))
               }
               <button onClick={handleAddAssigned} type="button" className="task-plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
@@ -95,7 +96,7 @@ function MyVerticallyCenteredModal(props: any) {
               {
                 comments.map((comment: IComment, index: Key) => (
                   <div className='post'key={index}>
-                    <img className='commentavatar' alt='?' src={users.find((u: IUser) => {return u.username === comment.authorId;}).avatarUrl}></img>
+                    <img className='commentavatar' alt='?' src={users.find((u: IUser) => {return u._id === comment.authorId;}).avatarUrl}></img>
                    
                     <p className='comment'>{comment.message}</p>
                   </div>

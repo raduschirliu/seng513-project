@@ -243,7 +243,7 @@ export default function BoardPage() {
         </div>
 
         <div className='d-flex w-100 mw-100 task-column-container'>
-          {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
+          {board? <TaskArea columns={columns} onDragEnd={onDragEnd} boardusers={board.users} me={user} api={taskAPI}/>: <TaskArea columns={columns} onDragEnd={onDragEnd} boardusers={board.users} me={user} api={taskAPI}/>}
         </div >
       </div >
     </div >

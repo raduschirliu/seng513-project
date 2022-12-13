@@ -3,8 +3,9 @@ import { ITask, IUser } from '../../models';
 import { Column, ColumnInfo } from './BoardPage';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
 import { TestApi } from '../../api/test';
+import { TasksApi } from '../../api/tasks';
 
-export default function taskArea (props: {columns: Column, onDragEnd: any, boardusers: IUser[], me_user: IUser, endp: TestApi}) {
+export default function taskArea (props: {columns: Column, onDragEnd: any, boardusers: IUser[], me_user: IUser, endp: TasksApi}) {
     return (
         <DragDropContext onDragEnd={result => props.onDragEnd(result)}>
             {
@@ -38,7 +39,7 @@ export default function taskArea (props: {columns: Column, onDragEnd: any, board
                                               ...provided.draggableProps.style
                                             }}>
                                             {/*{item.name}*/}
-                                            {/*<TaskDetails thetask={item} users={props.boardusers} me={props.me_user} api={props.endp} />*/}
+                                            <TaskDetails thetask={item} users={props.boardusers} me={props.me_user} api={props.endp} />
                                           </div>
                                         );
                                       }}

@@ -26,7 +26,7 @@ export default function Example() {
   }
 
   const mei: IUser = {
-    _id: "1",
+    _id: "9",
     username: "Jon",
     fullName: "Jon",
     avatarUrl: "https://avatars.dicebear.com/api/initials/j.svg",
@@ -61,7 +61,7 @@ export default function Example() {
   let com5: IComment = {
     _id: "7",
     authorId: ass2._id,
-    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+    message: "Lorem ipsum dolousernamer sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
   }
 
   const taski: ITask = {
