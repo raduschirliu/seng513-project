@@ -22,15 +22,12 @@ export class BoardsApi extends Api {
       .then((res) => res.data);
   }
 
-  create(task: ITask): Promise<ApiResponse<IBoard>> {
+  createTask(
+    boardId: string,
+    task: Partial<ITask>
+  ): Promise<ApiResponse<ITask>> {
     return this.api
-      .post(
-        '/',
-        {
-          task,
-        },
-        { headers: this.headers }
-      )
+      .post(`/${boardId}/tasks`, task, { headers: this.headers })
       .then((res) => res.data);
   }
 

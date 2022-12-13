@@ -1,39 +1,69 @@
 import { Key, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Button, Modal, Form, ModalTitle } from 'react-bootstrap';
+import { Button, Modal, Form, ModalTitle, ModalProps } from 'react-bootstrap';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import './taskcreationstyle.css';
+import { ITask } from '../../models';
+import { BoardsApi } from '../../api/boards';
+import useApi from '../../state/useApi';
 
 type TaskFormData = {
   taskName: string;
   taskDescription: string;
 };
 
-function TaskCreation(props: any) {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+export type AddTaskModalProps = ModalProps & {
+  boardId: string;
+  show: boolean;
+  onTaskAdded: (newTask: ITask) => void;
+  onClose: () => void;
+};
+
+export function AddTaskModal({
+  boardId,
+  show,
+  onTaskAdded,
+  onClose,
+  ...rest
+}: AddTaskModalProps) {
   const { register, handleSubmit, reset } = useForm<TaskFormData>();
+  const boardApi = useApi(BoardsApi);
 
   const onSubmit: SubmitHandler<TaskFormData> = (data) => {
-    console.log('new task created');
-    reset();
+    console.log('adding new task to board...', boardId, data);
+    boardApi
+      .createTask(boardId, {
+        name: data.taskName,
+        description: data.taskDescription,
+      })
+      .then((res) => {
+        if (!res.success) {
+          console.error('Failed to create task', res.error);
+          return;
+        }
+
+        console.log('new task created');
+        reset();
+        onTaskAdded(res.data);
+        console.log(res.data);
+      });
   };
 
   return (
     <Modal
-      {...props}
+      {...rest}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      portalClassName="taskcreation"
+      show={show}
     >
       <div>
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
             <h2 className="taskname">Create New Task</h2>
           </Modal.Title>
-          <button className="xbutton" onClick={props.onHide}>
+          <button className="xbutton" onClick={onClose}>
             <FontAwesomeIcon className="x-icon" icon={faXmark} />
           </button>
         </Modal.Header>
@@ -45,7 +75,7 @@ function TaskCreation(props: any) {
                 className="control"
                 type="text"
                 {...register('taskName', { required: true })}
-                placeholder="task name..."
+                placeholder="Task name..."
               />
             </Form.Group>
             <Form.Group className="group">
@@ -54,31 +84,15 @@ function TaskCreation(props: any) {
                 className="control"
                 type="text"
                 {...register('taskDescription', { required: true })}
-                placeholder="task description..."
+                placeholder="Task description..."
               />
             </Form.Group>
+            <Button variant="primary" type="submit" className="mt-4">
+              Create
+            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" type="submit" onClick={handleClose}>
-            Submit
-          </Button>
-        </Modal.Footer>
       </div>
     </Modal>
-  );
-}
-
-export default function AddTask() {
-  const [modalShow, setModalShow] = useState(false);
-
-  return (
-    <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        Create New Task
-      </Button>
-
-      <TaskCreation show={modalShow} onHide={() => setModalShow(false)} />
-    </>
   );
 }

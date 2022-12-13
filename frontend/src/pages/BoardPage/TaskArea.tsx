@@ -1,8 +1,14 @@
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
-import { ITask } from '../../models';
-import { Column, ColumnInfo } from './BoardPage';
+import { ITask, IUser } from '../../models';
+import { Column } from './BoardPage';
 
-export default function taskArea(props: { columns: Column; onDragEnd: any }) {
+export default function TaskArea(props: {
+  columns: Column;
+  onDragEnd: any;
+  boardusers: IUser[];
+  me_user: IUser;
+  onTaskSelected: (task: ITask) => void;
+}) {
   return (
     <DragDropContext onDragEnd={(result) => props.onDragEnd(result)}>
       {Object.entries(props.columns).map(([columnId, column], index) => {
@@ -52,7 +58,11 @@ export default function taskArea(props: { columns: Column; onDragEnd: any }) {
                                     ...provided.draggableProps.style,
                                   }}
                                 >
-                                  {item.name}
+                                  <div
+                                    onClick={() => props.onTaskSelected(item)}
+                                  >
+                                    {item.name}
+                                  </div>
                                 </div>
                               );
                             }}

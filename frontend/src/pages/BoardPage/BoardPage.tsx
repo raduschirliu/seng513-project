@@ -19,6 +19,8 @@ import useAuth from '../../state/auth/useAuth';
 import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import { TasksApi } from '../../api/tasks';
+import TaskDetails from '../../components/TaskDetails/TaskDetails';
+import { AddTaskModal } from '../../components/AddTask/TaskCreation';
 import AddTask from '../../components/AddTask/TaskCreation';
 import UserList from '../../components/UserList/UserList';
 
@@ -34,15 +36,19 @@ const defaultBoard: IBoard = {
   _id: 'DEFAULT',
   name: 'Project Name',
   users: [],
+  admins: [],
   tasks: [],
 };
 
 export default function BoardPage() {
   const { user } = useAuth();
+
   const boardAPI = useApi(BoardsApi);
   const taskAPI = useApi(TasksApi);
   const [board, setBoard] = useState(defaultBoard);
   const [viewMyTasks, setViewMyTasks] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [showAddTaskModal, setShowAddTaskModal] = useState<boolean>(false);
 
   const toDoId = uuid();
   const inProgressId = uuid();
@@ -164,8 +170,8 @@ export default function BoardPage() {
 
     // Opens a new task window to edit task details
     // Add task to database
-    <AddTask></AddTask>;
-  };
+    <AddTask></AddTask>    
+  }
 
   const modifyTask = (task: ITask) => {
     const taskToSend: Partial<ITask> = {
@@ -178,8 +184,9 @@ export default function BoardPage() {
 
   const getTasks = () => {
     // TODO: complete
+    
     // Retrieves tasks from the database/server
-  };
+  }
 
   const viewMyTasksHandler = () => {
     let tasks: ITask[] = [];
@@ -199,7 +206,7 @@ export default function BoardPage() {
     }
 
     categorizeTasks(tasks);
-  };
+  }
 
   return (
     <div className="d-flex bg-light page">
@@ -245,9 +252,7 @@ export default function BoardPage() {
         <div className="d-flex board-page-header p-2 mx-4 my-2">
           <h1>{board.name}</h1>
 
-          <button type="button" className="plus-button">
-            <FontAwesomeIcon className="plus-icon" icon={faPlus} />
-          </button>
+          <button type="button" className="plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
         </div>
 
         <div className="d-flex button-container w-100 mw-100">
@@ -260,14 +265,15 @@ export default function BoardPage() {
           </button>
         </div>
 
-        <div className="d-flex w-100 mw-100 task-column-container">
-          {board ? (
-            <TaskArea columns={columns} onDragEnd={onDragEnd} />
-          ) : (
-            <TaskArea columns={columns} onDragEnd={onDragEnd} />
-          )}
+        <div className='d-flex w-100 mw-100 task-column-container'>
+          {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
+        </div >
+      </div >
+      <div style={{width: "19%", minWidth: "265px", paddingLeft: "0.5vw", paddingTop: "12px"}}>
+        <div>
+          <UserList/>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

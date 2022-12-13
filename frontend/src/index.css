@@ -95,7 +95,14 @@ code {
   padding-bottom: 4px;
   color: white;
 }
-.button-container {
+
+.taskclick {
+  color: black;
+  border-width: 0px;
+  background-color: white;
+}
+
+.button-container{
   margin: 0 2em;
 }
 
