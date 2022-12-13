@@ -19,7 +19,7 @@ type CreateBoardRequest = {
 
 type CreateBoardResponse = IBoard;
 
-router.post('/', async (req, res) => {
+router.post('/create', async (req, res) => {
   const userId = verifyAuthToken(req);
   if (!userId) {
     res.sendStatus(StatusCodes.UNAUTHORIZED);
@@ -323,3 +323,5 @@ router.get('/boards/:boardId/list-users', async (req, res) => {
   */
   successResponse<UserListResponse>(res, userList);
 })
+
+
