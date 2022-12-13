@@ -37,5 +37,21 @@ export default function useAuth() {
     });
   }
 
-  return { user: state.user, jwt: state.jwt, login, logout, isLoggedIn };
+  function signUp(username: string, fullName: string, password: string) {
+    return authApi.createUser(username, password, fullName).then((data) => {
+      if (!data) {
+        console.error('Invalid signup data', data);
+        return;
+      }
+
+      setState({
+        user: data.user,
+        jwt: data.jwt,
+      });
+
+      return data.user;
+    });
+  }
+
+  return { user: state.user, jwt: state.jwt, login, logout, isLoggedIn, signUp };
 }
