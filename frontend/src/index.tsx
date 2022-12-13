@@ -34,7 +34,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/chat',
-    element: <ConversationsListPage />,
+    element: (
+      <ProtectedPage>
+        <ConversationsListPage />
+      </ProtectedPage>
+    ),
   },
   {
     path: '/chat/:conversationId',
