@@ -31,12 +31,16 @@ export class BoardsApi extends Api {
       .then((res) => res.data);
   }
 
-  createBoard(boardname: string, adminId: string): Promise<ApiResponse<IBoard>> {
+  createBoard(
+    boardname: string,
+    adminId: string
+  ): Promise<ApiResponse<IBoard>> {
     return this.api
       .post(
         '/create',
         {
-          boardname, adminId
+          boardname,
+          adminId,
         },
         { headers: this.headers }
       )
@@ -66,12 +70,15 @@ export class BoardsApi extends Api {
   }
 
   userList(boardId: string): Promise<ApiResponse<IUser>> {
-    return this.api
-      //.get(`/${boardId}/list-users`,{
-      //  headers: this.headers,
-      //}).then((res) => res.data);
-      .get('/list-users',{
-        headers: this.headers,
-      }).then((res) => res.data);
+    return (
+      this.api
+        //.get(`/${boardId}/list-users`,{
+        //  headers: this.headers,
+        //}).then((res) => res.data);
+        .get('/list-users', {
+          headers: this.headers,
+        })
+        .then((res) => res.data)
+    );
   }
 }

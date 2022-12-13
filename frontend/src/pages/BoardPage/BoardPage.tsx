@@ -164,6 +164,13 @@ export default function BoardPage() {
     }
   };
 
+  const addTask = (task: ITask) => {
+    // TODO: complete
+
+    // Opens a new task window to edit task details
+    // Add task to database
+  }
+
   const modifyTask = (task: ITask) => {
     const taskToSend: Partial<ITask> = {
       status: task.status,
@@ -173,13 +180,11 @@ export default function BoardPage() {
     });
   };
 
-  const onTaskSelected = (task: ITask) => {
-    setSelectedTask(task);
-  };
-
-  const onDetailsClose = () => {
-    setSelectedTask(false);
-  };
+  const getTasks = () => {
+    // TODO: complete
+    
+    // Retrieves tasks from the database/server
+  }
 
   const viewMyTasksHandler = () => {
     let tasks: ITask[] = [];
@@ -199,10 +204,6 @@ export default function BoardPage() {
     }
 
     categorizeTasks(tasks);
-  };
-
-  if (!user) {
-    return null;
   }
 
   return (
@@ -249,13 +250,7 @@ export default function BoardPage() {
         <div className="d-flex board-page-header p-2 mx-4 my-2">
           <h1>{board.name}</h1>
 
-          <button
-            type="button"
-            className="plus-button"
-            onClick={() => setShowAddTaskModal(true)}
-          >
-            <FontAwesomeIcon className="plus-icon" icon={faPlus} />
-          </button>
+          <button type="button" className="plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
         </div>
 
         <div className="d-flex button-container w-100 mw-100">
@@ -268,53 +263,15 @@ export default function BoardPage() {
           </button>
         </div>
 
-        <div className="d-flex w-100 mw-100 task-column-container">
-          {board ? (
-            <TaskArea
-              columns={columns}
-              onDragEnd={onDragEnd}
-              boardusers={[...board.users, ...board.admins]}
-              me={user}
-              onTaskSelected={onTaskSelected}
-            />
-          ) : (
-            <TaskArea
-              columns={columns}
-              onDragEnd={onDragEnd}
-              boardusers={[...board.users, ...board.admins]}
-              me={user}
-              onTaskSelected={onTaskSelected}
-            />
-          )}
-
-          <TaskDetails
-            showModal={!!selectedTask}
-            task={selectedTask}
-            users={[...board.users, ...board.admins]}
-            onHide={onDetailsClose}
-          />
-        </div>
-      </div>
-
-      <div
-        style={{
-          width: '19%',
-          minWidth: '265px',
-          paddingLeft: '0.5vw',
-          paddingTop: '12px',
-        }}
-      >
+        <div className='d-flex w-100 mw-100 task-column-container'>
+          {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
+        </div >
+      </div >
+      <div style={{width: "19%", minWidth: "265px", paddingLeft: "0.5vw", paddingTop: "12px"}}>
         <div>
-          <UserList />
+          <UserList/>
         </div>
       </div>
-
-      <AddTaskModal
-        boardId={board._id}
-        show={showAddTaskModal}
-        onTaskAdded={() => refresh()}
-        onClose={() => setShowAddTaskModal(false)}
-      />
-    </div>
+    </div >
   );
 }

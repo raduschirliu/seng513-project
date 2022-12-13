@@ -17,7 +17,6 @@ export class TestApi extends Api {
       .catch((res) => res.data as IPingResponse);
   }
 
-
   getUserList() {
     return this.api
       .get('/list-users', { headers: this.headers })
