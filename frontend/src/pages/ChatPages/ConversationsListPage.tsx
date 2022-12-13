@@ -45,10 +45,10 @@ export default function ConversationsListPage() {
         )}
 
         {!loading &&
-          conversations.map((c) => (
-            <Row>
+          conversations.map((conversation) => (
+            <Row key={conversation._id}>
               <Col>
-                <ConversationCard key={c._id} conversation={c} />
+                <ConversationCard conversation={conversation} />
               </Col>
             </Row>
           ))}

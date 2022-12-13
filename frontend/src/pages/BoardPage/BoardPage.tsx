@@ -1,15 +1,18 @@
+//@ts-nocheck
 import { useParams } from 'react-router-dom';
 import Logo from '../../assets/Logo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTableColumns, faList, faGear, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { DropResult } from 'react-beautiful-dnd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useInterval } from 'usehooks-ts';
 import TaskArea from './TaskArea';
 import uuid from "react-uuid";
 import { IUser, ITask, IBoard } from '../../models';
 import useAuth from '../../state/auth/useAuth';
 import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
+import { TasksApi } from '../../api/tasks';
 import AddTask from '../../components/AddTask/TaskCreation';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
 import { TestApi } from '../../api/test';
@@ -33,6 +36,7 @@ export default function BoardPage() {
   const { user } = useAuth();
 
   const boardAPI = useApi(BoardsApi);
+  const taskAPI = useApi(TasksApi);
   const [board, setBoard] = useState(defaultBoard);
   const [viewMyTasks, setViewMyTasks] = useState(false);
 
@@ -59,28 +63,21 @@ export default function BoardPage() {
 
   const [columns, setColumns] = useState(cols);
 
-  useEffect(() => {
-    const displayTasks = (tasks: ITask[]) => {
-      categorizeTasks(tasks);
-    }
-
-    const retrieveBoard = () => {
-      getBoard();
-    }
-
-    displayTasks(board.tasks);
-    retrieveBoard();
-  }, [])
-
-  const getBoard = () => {
+  const refresh = useCallback(() => {
     return boardAPI.get(boardId!).then((data) => {
       if (data.success){
         setBoard(data.data);
-        return;
+        categorizeTasks(data.data.tasks);
       }
-      alert("Could not retrieve board. Please try again later");
+      else{
+        alert("Could not retrieve board. Please try again later");
+      }
     });
-  }
+  })
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const categorizeTasks = (tasks: ITask[]) => {
     let seperatedTasks = {'todo': [] as ITask[], 'inprogress': [] as ITask[], 'done': [] as ITask[]}
@@ -103,6 +100,16 @@ export default function BoardPage() {
       }
     };
     setColumns(taskCols);
+  }
+
+  const getItemById = (taskId: string) => {
+    if (board.tasks.length !== 0){
+      for (let i=0; i<board.tasks.length; i++){
+        if (board.tasks[i]._id === taskId){
+          return board.tasks[i];
+        }
+      }
+    }
   }
 
   const onDragEnd = (result: DropResult) => {
@@ -128,7 +135,8 @@ export default function BoardPage() {
         }
       });
 
-      // TO DO: call PUT /tasks/{id} to modify task status
+      const task = getItemById(result.draggableId);
+      modifyTask(task);
 
     } else {
       const column = columns[source.droppableId];
@@ -154,9 +162,12 @@ export default function BoardPage() {
   }
 
   const modifyTask = (task: ITask) => {
-    // TODO: complete
-
-    // Calls task PUT endpoint to modify task
+    const taskToSend: Partial<ITask> = {
+      status: task.status
+    }
+    taskAPI.update(task._id, taskToSend).then( (data) => {
+      console.log(data);
+    });
   }
 
   const getTasks = () => {
@@ -168,10 +179,12 @@ export default function BoardPage() {
   const viewMyTasksHandler = () => {
     let tasks: ITask[] = [];
     if (!viewMyTasks){
-      const userName = user!.username;
-      for (let i=0; i<board.tasks.length; i++){
-        if (board.tasks[i].assigned.includes(userName)){
-          tasks.push(board.tasks[i]);
+      if (board.tasks.length !== 0){
+        const userId = user!._id;
+        for (let i=0; i<board.tasks.length; i++){
+          if (board.tasks[i].assignedUserIds.includes(userId)){
+            tasks.push(board.tasks[i]);
+          }
         }
       }
       setViewMyTasks(true);
@@ -230,7 +243,7 @@ export default function BoardPage() {
         </div>
 
         <div className='d-flex w-100 mw-100 task-column-container'>
-          {/*<TaskArea columns={cols} onDragEnd={onDragEnd} me_user={user} endp={}/>*/}
+          {board? <TaskArea columns={columns} onDragEnd={onDragEnd}/>: <TaskArea columns={columns} onDragEnd={onDragEnd}/>}
         </div >
       </div >
     </div >
