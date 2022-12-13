@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <HomePage />,
+    element: <LoginPage />,
   },
   {
     path: '/example',
@@ -44,10 +44,6 @@ const router = createBrowserRouter([
   {
     path: '/chat/:conversationId',
     element: <ConversationPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
   },
   {
     path: '/protected/',
