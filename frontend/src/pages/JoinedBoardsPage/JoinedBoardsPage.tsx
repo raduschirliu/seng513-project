@@ -23,12 +23,9 @@ export default function JoinedBoardsPage() {
   const [response, setResponse] = useState<string>('');
   const boardsApi = useApi(BoardsApi);
   const [boards, setBoards] = useState<IBoard[]>([]);
+  const [enteredId, setEnteredId] = useState<string>('');
 
   useEffect(() => {
-    getBoards();
-  }, [getBoards]);
-
-  function getBoards() {
     boardsApi.getAll().then((data) => {
       if (data.success) {
         setBoards(data.data);
@@ -36,12 +33,10 @@ export default function JoinedBoardsPage() {
         alert('Could not load boards. Please try again later.');
       }
     });
-  }
-
-  let enteredId = '';
+  }, []);
 
   function updateId(newId: string) {
-    enteredId = newId;
+    setEnteredId(newId);
   }
 
   function joinBoard() {
@@ -61,7 +56,7 @@ export default function JoinedBoardsPage() {
         >
           <h1 style={{}}>Your Projects</h1>
           <div style={{ position: 'absolute', right: '8.2vw', top: '20px' }}>
-            <CreateBoardModal></CreateBoardModal>
+            <CreateBoardModal/>
           </div>
         </div>
         <div
@@ -69,9 +64,9 @@ export default function JoinedBoardsPage() {
           style={{ paddingTop: '52px', paddingLeft: '6vw' }}
         >
           {boards.length === 0 ? (
-            <BoardTile boardname={'No boards found'} />
+            <p>No boards found</p>
           ) : (
-            boards.map((board) => <BoardTile boardname={board.name} />)
+            boards.map((board) => <BoardTile key={board._id} board={board} />)
           )}
 
           <div

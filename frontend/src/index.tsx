@@ -14,7 +14,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import JoinedBoardsPage from './pages/JoinedBoardsPage/JoinedBoardsPage';
 import AppRoot from './components/AppRoot/AppRoot';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
-import BoardUserList from './pages/BoardPages/BoardUserList';
+import BoardUserListPage from './pages/BoardPages/BoardUserListPage';
 import { NavContextProvider } from './state/nav/NavContextProvider';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/app/boards/:boardId/users',
-        element: <BoardUserList />,
+        element: <BoardUserListPage />,
       },
       {
         path: '/app/chat',

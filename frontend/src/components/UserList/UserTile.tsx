@@ -1,26 +1,17 @@
-import React from 'react';
-import Logo from '../../assets/Logo';
+import { IUser } from '../../models';
 import './UserList.css';
 
-interface Props {
-  fullname: string;
+export interface Props {
+  user: IUser;
 }
 
-const UserTile: React.FC<Props> = ({ fullname }) => {
+export default function UserTile({ user }: Props) {
   return (
     <div style={{ paddingRight: '13px', paddingTop: '6px' }}>
       <div className="tile">
-        {/* TODO: Get and use avatar url from api */}
         <div className="avatar-container">
           <div className="avatar">
-            <h1
-              style={{
-                fontSize: 'calc(12px + 1vw)',
-                paddingTop: 'calc(1px + 0.05vw)',
-              }}
-            >
-              {fullname.charAt(0)}
-            </h1>
+            <img src={user.avatarUrl} alt="User avatar" />
           </div>
         </div>
         <h3
@@ -30,11 +21,9 @@ const UserTile: React.FC<Props> = ({ fullname }) => {
             fontSize: 'calc(10px + 0.4vw)',
           }}
         >
-          {fullname}
+          {user.fullName}
         </h3>
       </div>
     </div>
   );
-};
-
-export default UserTile;
+}

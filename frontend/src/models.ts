@@ -36,6 +36,7 @@ export interface ITask extends IMongoItem {
 export interface IBoard extends IMongoItem {
   name: string;
   users: IUser[];
+  admins: IUser[];
   tasks: ITask[];
 }
 
