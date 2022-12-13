@@ -17,7 +17,7 @@ export default function ChatMessage({ author, message, sentByMe }: IParams) {
           bg={sentByMe ? 'primary' : 'light'}
           text={sentByMe ? 'white' : 'dark'}
         >
-          <Card.Body>{message.message}</Card.Body>
+          <Card.Body style={{padding: "7px"}}>{message.message}</Card.Body>
         </Card>
         <p className="m-0 fs-6 fst-italic">
           Sent {moment(message.timestamp).calendar()}
