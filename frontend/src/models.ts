@@ -10,17 +10,17 @@ export interface IUser extends IMongoItem {
 
 export interface IChatMessage extends IMongoItem {
   message: string;
-  author: string;
+  authorId: string;
   timestamp: Date;
 }
 
 export interface IChatConversation extends IMongoItem {
-  users: string[];
+  users: IUser[];
   messages: IChatMessage[];
 }
 
 export interface IComment extends IMongoItem {
-  author: string;
+  authorId: string;
   message: string;
 }
 

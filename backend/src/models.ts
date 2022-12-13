@@ -12,11 +12,12 @@ export type ISanitizedUser = Omit<IUser, 'passwordHash'>;
 
 export interface IChatMessage extends WithId<Document> {
   message: string;
-  author: string;
+  authorId: ObjectId;
+  timestamp: Date;
 }
 
 export interface IChatConversation extends WithId<Document> {
-  users: string[];
+  userIds: ObjectId[];
   messages: IChatMessage[];
 }
 
@@ -28,6 +29,7 @@ export interface IComment extends WithId<Document> {
 
 export interface ITask extends WithId<Document> {
   name: string;
+  createdBy: ObjectId;
   assignedUserIds: ObjectId[];
   status: 'todo' | 'inprogress' | 'done';
   description: string;

@@ -2,12 +2,60 @@ import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ObjectId } from 'mongodb';
 import { errorResponse, successResponse } from '../api';
-import { verifyAuthToken } from '../auth';
-import { collections } from '../db';
-import { IBoard, IComment, ITask } from '../models';
+import { sanitizeUser, verifyAuthToken } from '../auth';
+import { CollectionNames, collections } from '../db';
+import { IBoard, IComment, ITask, ISanitizedUser, IUser } from '../models';
 
 const router = express.Router();
 export default router;
+
+type IAggregatedBoard = Omit<IBoard, 'userIds' | 'adminIds'> & {
+  users: ISanitizedUser[];
+  admins: ISanitizedUser[];
+};
+
+async function getAggregatedBoards(
+  userId: ObjectId,
+  boardId: ObjectId | null
+): Promise<IAggregatedBoard[]> {
+  const cursor = collections.boards().aggregate();
+
+  // Only match a board with ID if specified
+  if (boardId) {
+    cursor.match({
+      _id: boardId,
+      $or: [{ userIds: userId }, { adminIds: userId }],
+    });
+  }
+
+  // Lookup users from userId
+  cursor.lookup({
+    from: CollectionNames.Users,
+    localField: 'userIds',
+    foreignField: '_id',
+    as: 'users',
+  });
+
+  // Look up admins from adminId
+  cursor.lookup({
+    from: CollectionNames.Users,
+    localField: 'adminIds',
+    foreignField: '_id',
+    as: 'admins',
+  });
+
+  // Remove fields for user/admin IDs, and user sensitive info
+  cursor.project({
+    userIds: 0,
+    adminIds: 0,
+    'users.passwordHash': 0,
+    'admins.passwordHash': 0,
+  });
+
+  const boards = (await cursor.toArray()) as IAggregatedBoard[];
+
+  return boards;
+}
 
 /**************************************************
  * Creating a new board
@@ -60,7 +108,10 @@ router.post('/', async (req, res) => {
  * Getting a board's info by ID
  **************************************************/
 
-type GetBoardByIdResponse = IBoard;
+type GetBoardByIdResponse = Omit<IBoard, 'userIds' | 'adminIds'> & {
+  users: ISanitizedUser[];
+  admins: ISanitizedUser[];
+};
 
 router.get('/:boardId', async (req, res) => {
   const userId = verifyAuthToken(req);
@@ -75,24 +126,21 @@ router.get('/:boardId', async (req, res) => {
   }
 
   const boardId = new ObjectId(req.params.boardId);
-  const board = await collections.boards().findOne({
-    _id: boardId,
-    $or: [{ userIds: userId }, { adminIds: userId }],
-  });
+  const boards = await getAggregatedBoards(userId, boardId);
 
-  if (!board) {
+  if (!boards || boards.length < 1) {
     errorResponse(res, 'Board does not exist');
     return;
   }
 
-  successResponse<GetBoardByIdResponse>(res, board);
+  successResponse<GetBoardByIdResponse>(res, boards[0]);
 });
 
 /**************************************************
  * Get info about all boards
  **************************************************/
 
-type GetAllBoardsResponse = IBoard[];
+type GetAllBoardsResponse = IAggregatedBoard[];
 
 router.get('/', async (req, res) => {
   const userId = verifyAuthToken(req);
@@ -101,12 +149,11 @@ router.get('/', async (req, res) => {
     return;
   }
 
-  const boards = await collections
-    .boards()
-    .find({
-      $or: [{ userIds: userId }, { adminIds: userId }],
-    })
-    .toArray();
+  const boards = await getAggregatedBoards(userId, null);
+  if (!boards || boards.length < 1) {
+    errorResponse(res, 'Error fetching boards');
+    return;
+  }
 
   successResponse<GetAllBoardsResponse>(res, boards);
 });
@@ -156,16 +203,21 @@ router.post('/:boardId/join', async (req, res) => {
  * Create a new task on a board
  **************************************************/
 
-type CreateTaskRequest = {
-  name: string;
-  description: string;
-};
+type CreateTaskRequest = ITask;
 type CreateTaskResponse = ITask;
 
 router.post('/:boardId/tasks', async (req, res) => {
   const data = req.body as CreateTaskRequest;
 
-  if (!data?.description || !data?.name) {
+  if (
+    !data?.description ||
+    !data?.name ||
+    !data?.createdBy ||
+    !data?.createdAt ||
+    !data?.assignedUserIds ||
+    !data?.status ||
+    !data?.comments
+  ) {
     res.sendStatus(StatusCodes.BAD_REQUEST);
     return;
   }
@@ -181,16 +233,6 @@ router.post('/:boardId/tasks', async (req, res) => {
     return;
   }
 
-  const task: ITask = {
-    _id: new ObjectId(),
-    assignedUserIds: [],
-    comments: [],
-    createdAt: new Date(),
-    status: 'todo',
-    name: data.name,
-    description: data.description,
-  };
-
   const boardObjId = new ObjectId(req.params.boardId);
   const result = await collections.boards().updateOne(
     {
@@ -199,7 +241,7 @@ router.post('/:boardId/tasks', async (req, res) => {
     },
     {
       $push: {
-        tasks: task,
+        tasks: data,
       },
     }
   );
@@ -209,5 +251,85 @@ router.post('/:boardId/tasks', async (req, res) => {
     return;
   }
 
-  successResponse<CreateTaskResponse>(res, task);
+  successResponse<CreateTaskResponse>(res, data);
+});
+
+/**************************************************
+ * Return tasks that is assigned to user
+ **************************************************/
+
+type UserAssignedTasksResponse = ITask[];
+
+router.get('/boards/:boardId/your-tasks', async (req, res) => {
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
+
+  if (!ObjectId.isValid(req.params.boardId)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  const boardObjId = new ObjectId(req.params.boardId);
+  const board = await collections.boards().findOne({
+    _id: boardObjId,
+    $or: [{ userIds: userId }, { adminIds: userId }],
+  });
+
+  if (!board) {
+    errorResponse(res, 'Board does not exist');
+    return;
+  }
+
+  let userTasks = new Array<ITask>();
+  const tasks = board.tasks;
+  for (let i = 0; i < tasks.length; i++) {
+    if (tasks[i].assignedUserIds.includes(userId)) {
+      userTasks.push(tasks[i]);
+    }
+  }
+
+  successResponse<UserAssignedTasksResponse>(res, userTasks);
+});
+
+/**************************************************
+ * Return tasks that user created on board
+ **************************************************/
+
+type UserCreatedTasksResponse = ITask[];
+
+router.get('/boards/:boardId/your-created-tasks', async (req, res) => {
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
+
+  if (!ObjectId.isValid(req.params.boardId)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  const boardObjId = new ObjectId(req.params.boardId);
+  const board = await collections.boards().findOne({
+    _id: boardObjId,
+    $or: [{ userIds: userId }, { adminIds: userId }],
+  });
+
+  if (!board) {
+    errorResponse(res, 'Board does not exist');
+    return;
+  }
+
+  let createdTasks = new Array<ITask>();
+  const tasks = board.tasks;
+  for (let i = 0; i < tasks.length; i++) {
+    if (tasks[i].createdBy === userId) {
+      createdTasks.push(tasks[i]);
+    }
+  }
+
+  successResponse<UserCreatedTasksResponse>(res, createdTasks);
 });

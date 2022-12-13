@@ -1,0 +1,44 @@
+<!-- initial html code that got converted to jsx -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="styles.css"
+</head>
+<body>
+    <nav class="navBarContainer">
+        <h1 class="navBarTitle">Sign Up</h1>
+    </nav>
+
+    <section class="heroSection">
+        <div class="leftHero">
+            <img class="leftHeroImage" src="img/logo.png" alt="">
+            <p class="leftHeroText">
+                A software curated for agile development. Join Today!
+            </p>
+            <ul class="leftHeroFeaturesList">
+                <li><span>&#10003;</span> Create a project specific board.</li>
+                <li><span>&#10003;</span> Create & store tasks on a project board.</li>
+                <li><span>&#10003;</span> Join an exisiting project board through a code.</li>
+                <li><span>&#10003;</span> Self assign a task &  comment on tasks.</li>
+                <li><span>&#10003;</span> And so much more!</li>
+            </ul>
+        </div>
+
+        <form class = "rightHero" action="">
+            <label class="label" for="email">Email:</label>
+            <input class="textbox" type="text" id="email" name="email"><br><br>
+            <label class="label" for="fullName">Full Name:</label>
+            <input class="textbox" type="text" id="fullName" name="fullName"><br><br>
+            <label class="label" for="password">Password:</label>
+            <input class="textbox" type="password" id="password" name="password"><br><br>
+            <label class="label" for="confirmPassword">Confirm Password:</label>
+            <input class="textbox" type="password" id="confirmPassword" name="confirmPassword"><br><br>
+            <input type="submit" value="Create" class="createButton">
+          </form>
+    </section>
+</body>
+</html>
