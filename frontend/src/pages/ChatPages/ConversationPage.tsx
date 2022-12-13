@@ -66,6 +66,7 @@ export default function ConversationsPage() {
 
       const msg = res.data;
 
+      setCurrentMessage('');
       setConversation((prevVal) => {
         if (!prevVal) return null;
 
@@ -75,8 +76,6 @@ export default function ConversationsPage() {
         };
       });
     });
-
-    setCurrentMessage('');
   }
 
   useEffect(() => {
@@ -112,8 +111,8 @@ export default function ConversationsPage() {
           <h2>Users:</h2>
         </Row>
         {conversation.users.map((user) => (
-          <Row>
-            <p key={user._id.toString()}>{user.fullName}</p>
+          <Row key={user._id}>
+            <p>{user.fullName}</p>
           </Row>
         ))}
       </Container>
@@ -125,7 +124,7 @@ export default function ConversationsPage() {
       <Container>
         <Row>
           <Col>
-            <h1>Conversation: {conversation._id}</h1>
+            <h1>Conversation</h1>
           </Col>
         </Row>
 
@@ -135,6 +134,9 @@ export default function ConversationsPage() {
               {conversation.messages.map((msg) => (
                 <ChatMessage
                   key={msg._id}
+                  author={
+                    conversation.users.find((u) => u._id === msg.authorId)!
+                  }
                   message={msg}
                   sentByMe={msg.authorId === user._id}
                 />
@@ -148,6 +150,7 @@ export default function ConversationsPage() {
             <Stack direction="horizontal" gap={4}>
               <Form.Control
                 type="text"
+                value={currentMessage}
                 onChange={(event) => setCurrentMessage(event.target.value)}
               />
               <Button onClick={() => sendMessage()}>

@@ -1,17 +1,18 @@
 import moment from 'moment';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import { IChatMessage } from '../../models';
+import { IChatMessage, IUser } from '../../models';
 
 export interface IParams {
+  author: IUser;
   message: IChatMessage;
   sentByMe: boolean;
 }
 
-export default function ChatMessage({ message, sentByMe }: IParams) {
+export default function ChatMessage({ author, message, sentByMe }: IParams) {
   function MessageBody() {
     return (
       <>
-        <p className="m-0 fw-semibold">{message.authorId}</p>
+        <p className="m-0 fw-semibold">{author.fullName}</p>
         <Card
           bg={sentByMe ? 'primary' : 'light'}
           text={sentByMe ? 'white' : 'dark'}

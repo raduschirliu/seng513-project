@@ -1,3 +1,4 @@
+// @ts-nocheck
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -23,15 +24,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <HomePage />,
-  },
-  {
-    path: '/example',
-    element: <ExamplePage />,
+    element: <LoginPage />,
   },
   {
     path: '/board/:boardId',
-    element: <BoardPage />,
+    element: (
+      <ProtectedPage>
+        <BoardPage />
+      </ProtectedPage>
+    ),
   },
   {
     path: '/createboard',
@@ -50,10 +51,6 @@ const router = createBrowserRouter([
     element: <ConversationPage />,
   },
   {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
     path: '/protected/',
     element: (
       <ProtectedPage>
@@ -67,11 +64,11 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <AuthContextProvider>
+    <RouterProvider router={router} />
+  </AuthContextProvider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

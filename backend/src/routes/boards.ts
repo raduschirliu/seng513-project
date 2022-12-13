@@ -150,7 +150,7 @@ router.get('/', async (req, res) => {
   }
 
   const boards = await getAggregatedBoards(userId, null);
-  if (!boards || boards.length < 1) {
+  if (!boards) {
     errorResponse(res, 'Error fetching boards');
     return;
   }
@@ -203,22 +203,19 @@ router.post('/:boardId/join', async (req, res) => {
  * Create a new task on a board
  **************************************************/
 
-type CreateTaskRequest = ITask;
+type CreateTaskRequest = {
+  name: string;
+  description: string;
+  assignedUserIds?: ObjectId[];
+  status?: 'todo' | 'inprogress' | 'done';
+};
 type CreateTaskResponse = ITask;
 
 router.post('/:boardId/tasks', async (req, res) => {
   const data = req.body as CreateTaskRequest;
 
-  if (
-    !data?.description ||
-    !data?.name ||
-    !data?.createdBy ||
-    !data?.createdAt ||
-    !data?.assignedUserIds ||
-    !data?.status ||
-    !data?.comments
-  ) {
-    res.sendStatus(StatusCodes.BAD_REQUEST);
+  if (!data || !data?.name || !data?.description) {
+    errorResponse(res, 'Invalid message body', StatusCodes.BAD_REQUEST);
     return;
   }
 
@@ -229,9 +226,21 @@ router.post('/:boardId/tasks', async (req, res) => {
   }
 
   if (!ObjectId.isValid(req.params.boardId)) {
-    res.sendStatus(StatusCodes.BAD_REQUEST);
+    errorResponse(res, 'Invalid board ID', StatusCodes.BAD_REQUEST);
     return;
   }
+
+  // Creating this to ensure the user can't inject weird properties into tasks
+  const newTask: ITask = {
+    _id: new ObjectId(),
+    name: data.name,
+    description: data?.description,
+    assignedUserIds: data?.assignedUserIds || [],
+    status: data?.status || 'todo',
+    comments: [],
+    createdAt: new Date(),
+    createdBy: userId,
+  };
 
   const boardObjId = new ObjectId(req.params.boardId);
   const result = await collections.boards().updateOne(
@@ -241,7 +250,7 @@ router.post('/:boardId/tasks', async (req, res) => {
     },
     {
       $push: {
-        tasks: data,
+        tasks: newTask,
       },
     }
   );
@@ -251,7 +260,7 @@ router.post('/:boardId/tasks', async (req, res) => {
     return;
   }
 
-  successResponse<CreateTaskResponse>(res, data);
+  successResponse<CreateTaskResponse>(res, newTask);
 });
 
 /**************************************************

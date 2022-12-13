@@ -63,7 +63,7 @@ export default function SignUpPage() {
                     <input {...register("password", {required: true})} className="textbox" type="password" required/><br /><br />
                     <label className="label" htmlFor="confirmPassword">Confirm Password:</label>
                     <input {...register("confirmPassword", {required: true})} className="textbox" type="password" required/><br /><br />
-                    <input type="submit" defaultValue="Create" className="createButton" />
+                    <input type="submit" value="Create" className="createButton" />
                 </form>
             </section>
       </div>

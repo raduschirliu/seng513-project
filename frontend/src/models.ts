@@ -26,15 +26,16 @@ export interface IComment extends IMongoItem {
 
 export interface ITask extends IMongoItem {
   name: string;
+  createdBy: string;
+  assignedUserIds: string[];
   status: 'todo' | 'inprogress' | 'done';
   description: string;
-  assigned: string[];
   comments: IComment[];
 }
 
 export interface IBoard extends IMongoItem {
   name: string;
-  users: string[];
+  users: IUser[];
   tasks: ITask[];
 }
 
