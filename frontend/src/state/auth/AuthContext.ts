@@ -8,7 +8,8 @@ export interface IAuthState {
 
 export interface IAuthContext {
   state: IAuthState;
-  setState: React.Dispatch<React.SetStateAction<IAuthState>>;
+  updateState: (newState: IAuthState) => void;
+  clearAuth: () => void;
 }
 
 const AuthContext = createContext<IAuthContext>(null!);

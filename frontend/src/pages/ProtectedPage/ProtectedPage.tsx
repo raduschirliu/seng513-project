@@ -1,24 +1,26 @@
 import { useNavigate } from 'react-router';
+import { useTimeout } from 'usehooks-ts';
 import useAuth from '../../state/auth/useAuth';
 
 export interface IProps {
   children?: React.ReactNode;
 }
 
+// Wait ~1.5 seconds to check auth before redirecting
+const REDIRECT_DELAY = 1500;
+
 export default function ProtectedPage({ children }: IProps) {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  if (!isLoggedIn()) {
-    console.log('not logged in!!');
-    setTimeout(() => {
+  useTimeout(
+    () => {
       if (!isLoggedIn()) {
         navigate('/');
       }
-    }, 1000);
+    },
+    isLoggedIn() ? null : REDIRECT_DELAY
+  );
 
-    <p>You need to be logged in to see this, redirecting...</p>;
-  }
-
-  return <>{children}</>;
+  return isLoggedIn() ? <>{children}</> : <div>Loading...</div>;
 }
