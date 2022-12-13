@@ -20,11 +20,15 @@ async function getAggregatedBoards(
 ): Promise<IAggregatedBoard[]> {
   const cursor = collections.boards().aggregate();
 
+  // Only match boards for the given user
+  cursor.match({
+    $or: [{ userIds: userId }, { adminIds: userId }],
+  });
+
   // Only match a board with ID if specified
   if (boardId) {
     cursor.match({
       _id: boardId,
-      $or: [{ userIds: userId }, { adminIds: userId }],
     });
   }
 
@@ -179,10 +183,15 @@ router.post('/:boardId/join', async (req, res) => {
   const boardObjId = new ObjectId(req.params.boardId);
   const result = await collections.boards().updateOne(
     {
-      _id: boardObjId,
-      $not: {
-        adminIds: userId,
-      },
+      $and: [
+        {
+          _id: boardObjId,
+        },
+        {
+          adminIds: { $ne: userId },
+          userIds: { $ne: userId },
+        },
+      ],
     },
     {
       $addToSet: {
@@ -341,14 +350,13 @@ router.get('/boards/:boardId/your-created-tasks', async (req, res) => {
   }
 
   successResponse<UserCreatedTasksResponse>(res, createdTasks);
-})
+});
 
 /**************************************************
  * Return list of members of board
  **************************************************/
 
 type UserListResponse = IUser[];
-
 
 router.get('/boards/:boardId/list-users', async (req, res) => {
   const userId = verifyAuthToken(req);
@@ -377,7 +385,7 @@ router.get('/boards/:boardId/list-users', async (req, res) => {
   const users = board.userIds;
 
   const data = collections.users().find();
-  
+
   // Loads in dummy data
   /*
   res.json(
@@ -385,6 +393,4 @@ router.get('/boards/:boardId/list-users', async (req, res) => {
   );
   */
   successResponse<UserListResponse>(res, userList);
-})
-
-
+});

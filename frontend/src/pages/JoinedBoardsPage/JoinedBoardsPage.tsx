@@ -13,38 +13,50 @@ import BoardTile from './BoardTile';
 import { Button } from 'react-bootstrap';
 import { BoardsApi } from '../../api/boards';
 import useApi from '../../state/useApi';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useAuth from '../../state/auth/useAuth';
 import { IBoard } from '../../models';
 import Page from '../../components/Page/Page';
+import { useEffectOnce } from 'usehooks-ts';
 
 export default function JoinedBoardsPage() {
   const { user } = useAuth();
-  const [response, setResponse] = useState<string>('');
   const boardsApi = useApi(BoardsApi);
   const [boards, setBoards] = useState<IBoard[]>([]);
   const [enteredId, setEnteredId] = useState<string>('');
 
-  useEffect(() => {
+  const refreshBoards = useCallback(() => {
     boardsApi.getAll().then((data) => {
       if (data.success) {
         setBoards(data.data);
       } else {
-        alert('Could not load boards. Please try again later.');
+        alert('Could not load boards: ' + data.error);
       }
     });
-  }, []);
+  }, [boardsApi]);
+
+  useEffectOnce(() => {
+    refreshBoards();
+  });
 
   function updateId(newId: string) {
     setEnteredId(newId);
   }
 
   function joinBoard() {
-    boardsApi.join(enteredId).then((data) => {
-      setResponse(JSON.stringify(data, null, 2));
-    });
+    boardsApi
+      .join(enteredId)
+      .then((data) => {
+        if (!data.success) {
+          alert('Failed to join board: ' + data.error);
+          return;
+        }
 
-    console.log(response);
+        refreshBoards();
+      })
+      .catch((err) => {
+        alert('Please enter a valid board ID');
+      });
   }
 
   return (
@@ -56,7 +68,7 @@ export default function JoinedBoardsPage() {
         >
           <h1 style={{}}>Your Projects</h1>
           <div style={{ position: 'absolute', right: '8.2vw', top: '20px' }}>
-            <CreateBoardModal/>
+            <CreateBoardModal />
           </div>
         </div>
         <div

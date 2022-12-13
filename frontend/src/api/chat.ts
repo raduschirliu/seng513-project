@@ -13,7 +13,7 @@ export class ChatApi extends Api {
   }
 
   startConversation(
-    participantIds: string
+    participantIds: string[]
   ): Promise<ApiResponse<IChatConversation>> {
     return this.api
       .post(
