@@ -4,11 +4,13 @@ import { Alert, Button, FormControl } from 'react-bootstrap';
 import TaskDetails from '../TaskDetails/TaskDetails';
 import { IComment, ITask, IUser } from '../../models';
 import useApi from '../../state/useApi';
+import { TasksApi } from '../../api/tasks';
 
 export default function Example() {
   const [message, setMessage] = useState<string>('');
   const [response, setResponse] = useState<string>('');
   const testApi = useApi(TestApi);
+  const taskApi = useApi(TasksApi);
 
   let ass1: IUser = {
     _id: "0",
@@ -99,7 +101,7 @@ export default function Example() {
         </Alert>
       )}
       <div>
-      <TaskDetails thetask = {taski} users = {users} me = {mei} ></TaskDetails>
+      <TaskDetails thetask = {taski} users = {users} me = {mei} api = {taskApi}></TaskDetails>
       </div>
     </div>
   );

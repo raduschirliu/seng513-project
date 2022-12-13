@@ -1,8 +1,10 @@
 import { Draggable, Droppable, DragDropContext} from 'react-beautiful-dnd';
-import { ITask } from '../../models';
+import { ITask, IUser } from '../../models';
 import { Column, ColumnInfo } from './BoardPage';
+import TaskDetails from '../../components/TaskDetails/TaskDetails';
+import { TestApi } from '../../api/test';
 
-export default function taskArea (props: {columns: Column, onDragEnd: any}) {
+export default function taskArea (props: {columns: Column, onDragEnd: any, boardusers: IUser[], me_user: IUser, endp: TestApi}) {
     return (
         <DragDropContext onDragEnd={result => props.onDragEnd(result)}>
             {
@@ -35,7 +37,8 @@ export default function taskArea (props: {columns: Column, onDragEnd: any}) {
                                               border: "1px solid black",
                                               ...provided.draggableProps.style
                                             }}>
-                                            {item.name}
+                                            {/*{item.name}*/}
+                                            {/*<TaskDetails thetask={item} users={props.boardusers} me={props.me_user} api={props.endp} />*/}
                                           </div>
                                         );
                                       }}

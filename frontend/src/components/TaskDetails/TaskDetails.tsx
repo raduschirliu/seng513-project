@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { IComment, ITask, IUser } from '../../models';
 import "./taskdetailstyle.css";
+import { TestApi } from '../../api/test';
+import { TasksApi } from '../../api/tasks';
 
 function MyVerticallyCenteredModal(props: any) {
 
@@ -14,6 +16,7 @@ function MyVerticallyCenteredModal(props: any) {
   const [users, s] = useState(props.users);
   const [me, a] = useState(props.me);
   const [mycomment, setMyComment] = useState("");
+  const [api, b] = useState(props.api);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -24,6 +27,7 @@ function MyVerticallyCenteredModal(props: any) {
     setComments((prevComments: IComment[]) => [
       ...prevComments,
       {_id:0,authorId:me.username,message:mycomment}
+      
 
     ]);
   }
@@ -115,14 +119,14 @@ function MyVerticallyCenteredModal(props: any) {
   );
 }
 
-export default function TaskDetails(props: {thetask: ITask, users: IUser[], me: IUser}) {
+export default function TaskDetails(props: {thetask: ITask, users: IUser[], me: IUser, api: TasksApi}) {
   const [modalShow, setModalShow] = useState(false);
 
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
+      <button className='taskclick' onClick={() => setModalShow(true)}>
         {props.thetask.name}
-      </Button>
+      </button>
 
       <MyVerticallyCenteredModal
         show={modalShow}
@@ -130,6 +134,7 @@ export default function TaskDetails(props: {thetask: ITask, users: IUser[], me: 
         task={props.thetask}
         users={props.users}
         me={props.me}
+        api={props.api}
       />
     </>
   );

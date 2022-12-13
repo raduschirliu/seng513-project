@@ -11,6 +11,8 @@ import useAuth from '../../state/auth/useAuth';
 import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
 import AddTask from '../../components/AddTask/TaskCreation';
+import TaskDetails from '../../components/TaskDetails/TaskDetails';
+import { TestApi } from '../../api/test';
 
 export interface ColumnInfo{
   name: string;
@@ -29,6 +31,7 @@ const defaultBoard: IBoard = {
 
 export default function BoardPage() {
   const { user } = useAuth();
+
   const boardAPI = useApi(BoardsApi);
   const [board, setBoard] = useState(defaultBoard);
   const [viewMyTasks, setViewMyTasks] = useState(false);
@@ -180,6 +183,9 @@ export default function BoardPage() {
     categorizeTasks(tasks);
   }
 
+  if(!user) {
+    return null;
+  }
   return (
     <div className='d-flex bg-light page'>
       {/* <p>ID from URL is: {params.boardId}</p> */}
@@ -224,7 +230,7 @@ export default function BoardPage() {
         </div>
 
         <div className='d-flex w-100 mw-100 task-column-container'>
-          <TaskArea columns={cols} onDragEnd={onDragEnd}/>
+          {/*<TaskArea columns={cols} onDragEnd={onDragEnd} me_user={user} endp={}/>*/}
         </div >
       </div >
     </div >
