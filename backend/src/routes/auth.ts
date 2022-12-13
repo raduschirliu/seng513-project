@@ -3,6 +3,7 @@ import express from 'express';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { createUser, loginUser } from '../auth';
+import { collections } from '../db';
 import { ISanitizedUser } from '../models';
 
 const router = express.Router();
@@ -69,18 +70,35 @@ router.post('/signup', async (req, res) => {
   try {
     const authData = await createUser(data.username, data.password);
 
-    // TODO(radu): Set username and avatar URL
-
     if (!authData) {
       res.sendStatus(StatusCodes.BAD_REQUEST);
       return;
     }
 
-    return res.json(authData as ISignupRespones);
-  } catch (err) {
+    const avatarUrl = `https://avatars.dicebear.com/api/initials/${
+      data.fullName + ' ' + authData.user._id
+    }.svg`;
+
+    const newUser = await collections.users().findOneAndUpdate(
+      {
+        _id: authData.user._id,
+      },
+      {
+        $set: {
+          fullName: data.fullName,
+          avatarUrl,
+        },
+      }
+    );
+
+    return res.json({
+      user: newUser.value,
+      jwt: authData.jwt,
+    } as ISignupRespones);
+  } catch (err: any) {
+    console.error('Error creating user: ', err);
     return res.status(StatusCodes.BAD_REQUEST).json({
       error: err,
     });
   }
 });
-
