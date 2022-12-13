@@ -28,6 +28,10 @@ const router = createBrowserRouter([
     path: '/login',
     element: <LoginPage />,
   },
+  {
+    path: '/',
+    element: <LoginPage />,
+  },
 
   // Everything else should be protected
   {
