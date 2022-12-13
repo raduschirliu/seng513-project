@@ -64,10 +64,11 @@ export default function Example() {
 
   const taski: ITask = {
     _id: "4",
+    createdBy: "1",
     name: "Create more tasks",
     status: "inprogress",
     description: "This is the task. This task is very important. Please do the task quickly but also do it well. You have 1 day to complete this task. If you do not complete this task, you will be fired",
-    assigned: [ass1.username,ass2.username],
+    assignedUserIds: [ass1.username,ass2.username],
     comments: [com1,com2,com3,com4,com5],
   }
 
