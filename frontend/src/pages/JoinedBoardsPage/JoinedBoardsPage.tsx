@@ -75,7 +75,7 @@ export default function JoinedBoardsPage() {
               display: 'flex',
               flexDirection: 'row',
               borderRadius: '15px',
-              width: '70vw',
+              width: '60vw',
               height: '100px',
               textAlign: 'left',
             }}
