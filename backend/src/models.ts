@@ -1,10 +1,14 @@
-import { WithId, Document } from 'mongodb';
+import { WithId, Document, ObjectId } from 'mongodb';
 
 export interface IUser extends WithId<Document> {
-  name: string;
-  email: string;
+  username: string;
+  passwordHash?: string;
+
+  fullName: string;
   avatarUrl: string;
 }
+
+export type ISanitizedUser = Omit<IUser, 'passwordHash'>;
 
 export interface IChatMessage extends WithId<Document> {
   message: string;
@@ -18,20 +22,24 @@ export interface IChatConversation extends WithId<Document> {
 }
 
 export interface IComment extends WithId<Document> {
-  author: string;
+  authorId: ObjectId;
   message: string;
+  timestamp: Date;
 }
 
 export interface ITask extends WithId<Document> {
   name: string;
+  createdBy: ObjectId;
+  assignedUserIds: ObjectId[];
   status: 'todo' | 'inprogress' | 'done';
   description: string;
-  assigned: string[];
   comments: IComment[];
+  createdAt: Date;
 }
 
 export interface IBoard extends WithId<Document> {
   name: string;
-  users: string[];
+  userIds: ObjectId[];
+  adminIds: ObjectId[];
   tasks: ITask[];
 }
