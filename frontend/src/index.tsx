@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthContextProvider } from './state/auth/AuthContextProvider';
+import SignUpPage from './pages/SignUpPage/SignUpPage'
 import HomePage from './pages/HomePage/HomePage';
 import ExamplePage from './pages/ExamplePage/ExamplePage';
 import BoardPage from './pages/BoardPage/BoardPage';
@@ -13,6 +14,10 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import ProtectedPage from './pages/ProtectedPage/ProtectedPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/signup',
+    element: <SignUpPage />
+  },
   {
     path: '/',
     element: <HomePage />,
