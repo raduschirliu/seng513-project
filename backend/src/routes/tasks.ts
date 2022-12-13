@@ -61,11 +61,13 @@ router.patch('/:taskId', async (req, res) => {
     }
   }
 
+  console.log(updates);
+
   const taskId = new ObjectId(req.params.taskId);
   const updateResult = await collections.boards().updateOne(
     {
-      $or: [{ userIds: userId }, { adminIds: userId }],
       'tasks._id': taskId,
+      $or: [{ userIds: userId }, { adminIds: userId }],
     },
     {
       $set: updates,

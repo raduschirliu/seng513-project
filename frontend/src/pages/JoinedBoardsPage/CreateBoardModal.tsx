@@ -5,13 +5,18 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Form, Button, Modal } from 'react-bootstrap';
+import { IBoard } from '../../models';
 
 type CreateBoardFormData = {
   boardname: string;
   adminId: string;
 };
 
-export default function CreateBoardModal() {
+export type Props = {
+  onBoardCreated: (board: IBoard) => void;
+};
+
+export default function CreateBoardModal({ onBoardCreated }: Props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -22,10 +27,18 @@ export default function CreateBoardModal() {
 
   const onSubmit: SubmitHandler<CreateBoardFormData> = (data) => {
     // Clear form and send log in request
-    console.log('Creating board');
+    console.log('Creating board...');
     reset();
 
-    boardsApi.createBoard(data.boardname, data.adminId);
+    boardsApi.createBoard(data.boardname).then((res) => {
+      if (!res.success) {
+        console.error('Failed to create board', res.error);
+        return;
+      }
+
+      onBoardCreated(res.data);
+      setShow(false);
+    });
   };
 
   return (
@@ -50,7 +63,11 @@ export default function CreateBoardModal() {
                     style={{ maxWidth: '400px' }}
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit" style={{backgroundColor: "#889bfc", border: "none"}}>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  style={{ backgroundColor: '#889bfc', border: 'none' }}
+                >
                   Create Board
                 </Button>
               </Form>
