@@ -1,61 +1,111 @@
 import { Key, useState } from 'react';
-import uuid from "react-uuid";
+import uuid from 'react-uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faXmark, faTableColumns, faList, faGear, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faXmark,
+  faTableColumns,
+  faList,
+  faGear,
+  faUserGroup,
+} from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Modal, { ModalProps } from 'react-bootstrap/Modal';
 import { IComment, ITask, IUser } from '../../models';
-import "./taskdetailstyle.css";
-import { TestApi } from '../../api/test';
+import './taskdetailstyle.css';
 import { TasksApi } from '../../api/tasks';
+import useApi from '../../state/useApi';
+import useAuth from '../../state/auth/useAuth';
 
-function MyVerticallyCenteredModal(props: any) {
+function TaskComment({
+  comment,
+  users,
+}: {
+  comment: IComment;
+  users: IUser[];
+}) {
+  return (
+    <div className="post">
+      <img
+        className="commentavatar"
+        alt="?"
+        src={
+          users.find((u: IUser) => {
+            return u._id === comment.authorId;
+          })?.avatarUrl
+        }
+      ></img>
 
-  const [comments, setComments] = useState(props.task.comments);
-  const [assigned, setAssigned] = useState(props.task.assignedUserIds);
-  const [users, s] = useState(props.users);
-  const [me, a] = useState(props.me);
-  const [mycomment, setMyComment] = useState("");
-  const [api, b] = useState(props.api);
+      <p className="comment">{comment.message}</p>
+    </div>
+  );
+}
 
-  //TO-DO: implement api calls with the handlers below
+export type TaskDetailsProps = ModalProps & {
+  showModal: boolean;
+  task: ITask;
+  users: IUser[];
+  onHide: () => void;
+};
+
+export default function TaskDetails({
+  showModal,
+  task,
+  users,
+  onHide,
+  ...rest
+}: TaskDetailsProps) {
+  const [newComments, setNewComments] = useState<IComment[]>([]);
+  const [mycomment, setMyComment] = useState('');
+  const tasksApi = useApi(TasksApi);
+  const { user } = useAuth();
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     handleMakeComment();
-    setMyComment("");
-  }
+    setMyComment('');
+  };
   const handleMakeComment = () => {
-    setComments((prevComments: IComment[]) => [
-      ...prevComments,
-      {_id:"99",authorId:me._id,message:mycomment}
-      
+    tasksApi.comment(task._id, mycomment).then((res) => {
+      if (!res.success) {
+        console.error('Failed to post comment', res.error);
+        return;
+      }
 
-    ]);
-  }
+      setNewComments((prevComments: IComment[]) => {
+        return [...prevComments, res.data];
+      });
+    });
+  };
   const handleAddAssigned = () => {
-    if(!assigned.some((item: string) => me._id === item)) {
-      setAssigned((prevAssigned: string[]) => [
-        ...prevAssigned,
-            me._id
-      ]);
-    }
+    if (!user) return;
+
+    // TODO(radu): API hookup
+    tasksApi.update(task._id, {
+      assignedUserIds: [...task.assignedUserIds, user._id],
+    });
+  };
+
+  if (!showModal || !task) {
+    return null;
   }
 
-  let lightclass = "";
-  let status = "";
-  if (props.task.status === 'inprogress'){
-    status = "In progress";
-    lightclass = "ylight";
-  }else if (props.task.status === 'todo'){
-    status = "To-do";
-    lightclass = "rlight";
-  }else if (props.task.status === 'done'){
-    status = "completed";
-    lightclass = "glight";
+  let lightclass = '';
+  let status = '';
+  if (task.status === 'inprogress') {
+    status = 'In progress';
+    lightclass = 'ylight';
+  } else if (task.status === 'todo') {
+    status = 'To-do';
+    lightclass = 'rlight';
+  } else if (task.status === 'done') {
+    status = 'completed';
+    lightclass = 'glight';
   }
   return (
     <Modal
-      {...props}
+      {...rest}
+      show={showModal}
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -63,80 +113,83 @@ function MyVerticallyCenteredModal(props: any) {
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h1 className='title'>{props.task.name}</h1>
-          <div className='status'>
+          <h1 className="title">{task.name}</h1>
+          <div className="status">
             <span className={lightclass}></span>
-            <i className='statusword'>{status}</i>
+            <i className="statusword">{status}</i>
           </div>
         </Modal.Title>
-        <button className='xbutton' onClick={props.onHide}><FontAwesomeIcon className="x-icon" icon={faXmark} /></button>
+        <button className="xbutton" onClick={onHide}>
+          <FontAwesomeIcon className="x-icon" icon={faXmark} />
+        </button>
       </Modal.Header>
       <Modal.Body className="dialog">
-        <div className='leftdiv'>
-          <div className='description'>
+        <div className="leftdiv">
+          <div className="description">
             <h4>Task Description</h4>
-            <p>{props.task.description}</p>
+            <p>{task.description}</p>
           </div>
-          <div className='assigned'>
-            <h4 className='atitle'>Assigned</h4>
-            <div className='avatars'>
-              {
-                assigned.map((user: string, index: Key) => (
-                    <img key={index} className='taskavatar' alt='?' src={users.find((u: IUser) => {return u._id === user;}).avatarUrl}></img>
-                ))
-              }
-              <button onClick={handleAddAssigned} type="button" className="task-plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
+          <div className="assigned">
+            <h4 className="atitle">Assigned</h4>
+            <div className="avatars">
+              {task.assignedUserIds.map((user: string, index: Key) => (
+                <img
+                  key={index}
+                  className="taskavatar"
+                  alt="?"
+                  src={
+                    users.find((u: IUser) => {
+                      return u._id === user;
+                    })?.avatarUrl
+                  }
+                ></img>
+              ))}
+              <button
+                onClick={handleAddAssigned}
+                type="button"
+                className="task-plus-button"
+              >
+                <FontAwesomeIcon className="plus-icon" icon={faPlus} />
+              </button>
             </div>
           </div>
         </div>
         <div className="comments">
           <h4>Comments</h4>
-          <div className='innercomments'>
-            <div className='commentbox'>
-              {
-                comments.map((comment: IComment, index: Key) => (
-                  <div className='post'key={index}>
-                    <img className='commentavatar' alt='?' src={users.find((u: IUser) => {return u._id === comment.authorId;}).avatarUrl}></img>
-                   
-                    <p className='comment'>{comment.message}</p>
-                  </div>
-                ))
-              }
+          <div className="innercomments">
+            <div className="commentbox">
+              {task.comments.map((comment: IComment) => (
+                <TaskComment
+                  key={comment._id}
+                  comment={comment}
+                  users={users}
+                />
+              ))}
+              {newComments.map((comment: IComment) => (
+                <TaskComment
+                  key={comment._id}
+                  comment={comment}
+                  users={users}
+                />
+              ))}
             </div>
-            <div className='writebox'>
+            <div className="writebox">
               <form onSubmit={handleSubmit}>
-                <input className='input' placeholder='write a comment' value={mycomment} onChange={(e) => setMyComment(e.target.value)}></input>
-                <input className='send' type="submit"></input>
+                <input
+                  className="input"
+                  placeholder="write a comment"
+                  value={mycomment}
+                  onChange={(e) => setMyComment(e.target.value)}
+                ></input>
+                <input className="send" type="submit"></input>
               </form>
             </div>
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        {/*
-        <Button onClick={props.onHide}>Close</Button>*/}
-      </Modal.Footer>
+      {/* <Modal.Footer>
+        <Button onClick={onHide}>Close</Button>
+      </Modal.Footer> */}
     </Modal>
-  );
-}
-
-export default function TaskDetails(props: {thetask: ITask, users: IUser[], me: IUser, api: TasksApi}) {
-  const [modalShow, setModalShow] = useState(false);
-
-  return (
-    <>
-      <button className='taskclick' onClick={() => setModalShow(true)}>
-        {props.thetask.name}
-      </button>
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        task={props.thetask}
-        users={props.users}
-        me={props.me}
-        api={props.api}
-      />
-    </>
   );
 }
