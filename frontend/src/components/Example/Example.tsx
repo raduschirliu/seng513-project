@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TestApi } from '../../api/test';
 import { Alert, Button, FormControl } from 'react-bootstrap';
 import TaskDetails from '../TaskDetails/TaskDetails';
-import { IComment, ITask, IUser } from '../../../models';
+import { IComment, ITask, IUser } from '../../models';
 import useApi from '../../state/useApi';
 
 export default function Example() {
@@ -11,35 +11,64 @@ export default function Example() {
   const testApi = useApi(TestApi);
 
   let ass1: IUser = {
-    id: "0",
-    name: "Adam",
-    email: "",
+    _id: "0",
+    username: "Adam",
+    fullName: "Adam",
     avatarUrl: "https://avatars.dicebear.com/api/initials/asdfasdf.svg",
   }
   let ass2: IUser = {
-    id: "1",
-    name: "Mark",
-    email: "",
+    _id: "1",
+    username: "Mark",
+    fullName: "Mark",
     avatarUrl: "https://avatars.dicebear.com/api/initials/m.svg",
   }
 
+  const mei: IUser = {
+    _id: "1",
+    username: "Jon",
+    fullName: "Jon",
+    avatarUrl: "https://avatars.dicebear.com/api/initials/j.svg",
+  }
+
+  const users = [ass1,ass2,mei];
+
   let com1: IComment = {
-    author: ass1,
+    _id: "2",
+    author: ass1.username,
     message: "This is a very good task",
   }
 
   let com2: IComment = {
-    author: ass2,
+    _id: "3",
+    author: ass2.username,
     message: "I agree. This is the best task. The reason that this task is so good is because the instructions are so clear and they gave us so much time!",
   }
 
+  let com3: IComment = {
+    _id: "5",
+    author: ass1.username,
+    message: "I guess we had better get started on this task now",
+  }
+
+  let com4: IComment = {
+    _id: "6",
+    author: ass2.username,
+    message: "Ok. But first I need to recipe lorem ipsum",
+  }
+
+  let com5: IComment = {
+    _id: "7",
+    author: ass2.username,
+    message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+  }
+
   const taski: ITask = {
-    id: "0",
+    _id: "4",
     name: "Create more tasks",
     status: "inprogress",
     description: "This is the task. This task is very important. Please do the task quickly but also do it well. You have 1 day to complete this task. If you do not complete this task, you will be fired",
-    assigned: [ass1,ass2],
-    comments: [com1,com2],
+    assigned: [ass1.username,ass2.username],
+    comments: [com1,com2,com3,com4,com5],
   }
 
   function sendMessage() {
@@ -70,9 +99,7 @@ export default function Example() {
         </Alert>
       )}
       <div>
-      <TaskDetails
-        {...taski}
-      ></TaskDetails>
+      <TaskDetails thetask = {taski} users = {users} me = {mei} ></TaskDetails>
       </div>
     </div>
   );

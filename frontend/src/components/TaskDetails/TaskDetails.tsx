@@ -4,18 +4,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark, faTableColumns, faList, faGear, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { IComment, ITask, IUser } from '../../../models';
+import { IComment, ITask, IUser } from '../../models';
 import "./taskdetailstyle.css";
 
 function MyVerticallyCenteredModal(props: any) {
 
   const [comments, setComments] = useState(props.task.comments);
   const [assigned, setAssigned] = useState(props.task.assigned);
-  const handleMakeComment = () => {
+  const [users, s] = useState(props.users);
+  const [me, a] = useState(props.me);
+  const [mycomment, setMyComment] = useState("");
 
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    handleMakeComment();
+    setMyComment("");
+  }
+  const handleMakeComment = () => {
+    setComments((prevComments: IComment[]) => [
+      ...prevComments,
+      {_id:0,author:me.username,message:mycomment}
+
+    ]);
   }
   const handleAddAssigned = () => {
-    
+    if(!assigned.some((item: string) => me.username === item)) {
+      setAssigned((prevAssigned: string[]) => [
+        ...prevAssigned,
+            me.username
+      ]);
+    }
   }
 
   let lightclass = "";
@@ -58,11 +76,11 @@ function MyVerticallyCenteredModal(props: any) {
             <h4 className='atitle'>Assigned</h4>
             <div className='avatars'>
               {
-                assigned.map((user: IUser, index: Key) => (
-                    <img key={index} className='taskavatar' alt='?' src={user.avatarUrl}></img>
+                assigned.map((user: string, index: Key) => (
+                    <img key={index} className='taskavatar' alt='?' src={users.find((u: IUser) => {return u.username === user;}).avatarUrl}></img>
                 ))
               }
-              <button type="button" className="task-plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
+              <button onClick={handleAddAssigned} type="button" className="task-plus-button"><FontAwesomeIcon className="plus-icon" icon={faPlus} /></button>
             </div>
           </div>
         </div>
@@ -73,7 +91,7 @@ function MyVerticallyCenteredModal(props: any) {
               {
                 comments.map((comment: IComment, index: Key) => (
                   <div className='post'key={index}>
-                    <img className='commentavatar' alt='?' src={comment.author.avatarUrl}></img>
+                    <img className='commentavatar' alt='?' src={users.find((u: IUser) => {return u.username === comment.author;}).avatarUrl}></img>
                    
                     <p className='comment'>{comment.message}</p>
                   </div>
@@ -81,8 +99,8 @@ function MyVerticallyCenteredModal(props: any) {
               }
             </div>
             <div className='writebox'>
-              <form>
-                <input className='input' placeholder='write a comment'></input>
+              <form onSubmit={handleSubmit}>
+                <input className='input' placeholder='write a comment' value={mycomment} onChange={(e) => setMyComment(e.target.value)}></input>
                 <input className='send' type="submit"></input>
               </form>
             </div>
@@ -97,19 +115,21 @@ function MyVerticallyCenteredModal(props: any) {
   );
 }
 
-export default function TaskDetails(thetask: ITask) {
+export default function TaskDetails(props: {thetask: ITask, users: IUser[], me: IUser}) {
   const [modalShow, setModalShow] = useState(false);
 
   return (
     <>
       <Button variant="primary" onClick={() => setModalShow(true)}>
-        {thetask.name}
+        {props.thetask.name}
       </Button>
 
       <MyVerticallyCenteredModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        task={thetask}
+        task={props.thetask}
+        users={props.users}
+        me={props.me}
       />
     </>
   );
