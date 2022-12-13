@@ -241,6 +241,184 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Boards",
+			"item": [
+				{
+					"name": "Create new board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"a great test board\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all boards you are in",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get board by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/:boardId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								":boardId"
+							],
+							"variable": [
+								{
+									"key": "boardId",
+									"value": "some-id-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"my test task 1\",\r\n    \"description\": \"hello this is a test!!!!!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards/:boardId/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								":boardId",
+								"tasks"
+							],
+							"variable": [
+								{
+									"key": "boardId",
+									"value": "639802fb3b1ccf525a49df02"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Add comment to task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"{{$randomCatchPhrase}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/:taskId/comment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								":taskId",
+								"comment"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "63980485e735050a06588322"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomWord}}\",\r\n    \"description\": \"{{$randomCatchPhrase}}\",\r\n    \"assignedUserIds\": [],\r\n    \"status\": \"todo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/:taskId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tasks",
+								":taskId"
+							],
+							"variable": [
+								{
+									"key": "taskId",
+									"value": "639807122ad5e43a98cb0a3d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {
@@ -277,11 +455,6 @@
 		{
 			"key": "base_url",
 			"value": "http://localhost:5000"
-		},
-		{
-			"key": "auth_token",
-			"value": "put-auth-token-here",
-			"type": "string"
 		}
 	]
 }
