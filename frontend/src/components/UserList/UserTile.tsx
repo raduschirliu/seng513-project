@@ -42,7 +42,7 @@ export default function UserTile({ user, hideStartChat }: Props) {
         >
           {user.fullName}
         </h3>
-        {!hideStartChat && <Button onClick={() => startChat()}>Chat</Button>}
+        {!hideStartChat && <Button className="m-2 p-2" onClick={() => startChat()}>Chat</Button>}
       </div>
     </div>
   );

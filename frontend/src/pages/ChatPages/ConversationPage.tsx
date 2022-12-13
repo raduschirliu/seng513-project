@@ -108,7 +108,7 @@ export default function ConversationsPage() {
         <Container>
           <Row>
             <Col>
-              <h1>Conversation</h1>
+              <h1 className="m-2 h-2">Conversation</h1>
             </Col>
           </Row>
 
@@ -145,13 +145,25 @@ export default function ConversationsPage() {
           </Row>
         </Container>
 
-        <div className="ms-auto">
+        <div
+          className="ms-auto align-items-start justify-content-start"
+          style={{ minWidth: '20%' }}
+        >
           <Row>
             <h2>Users</h2>
           </Row>
           {conversation.users.map((user) => (
             <Row key={user._id}>
-              <p>{user.fullName}</p>
+              <div className="d-flex flex-row ml-5 p-1 align-items-center">
+                <img
+                  src={user.avatarUrl}
+                  className="avatar m-2"
+                  alt="User avatar"
+                />
+                <p className="flex-grow-1 align-middle h-auto m-0 ms-2">
+                  {user.fullName}
+                </p>
+              </div>
             </Row>
           ))}
         </div>
