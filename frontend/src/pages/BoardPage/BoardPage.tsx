@@ -170,7 +170,6 @@ export default function BoardPage() {
 
     // Opens a new task window to edit task details
     // Add task to database
-    <AddTask></AddTask>    
   }
 
   const modifyTask = (task: ITask) => {
