@@ -9,7 +9,7 @@ export interface IProps {
 // Wait ~1.5 seconds to check auth before redirecting
 const REDIRECT_DELAY = 1500;
 
-export default function ProtectedPage({ children }: IProps) {
+export default function AuthProtected({ children }: IProps) {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 

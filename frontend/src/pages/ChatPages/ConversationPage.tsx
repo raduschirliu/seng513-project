@@ -14,10 +14,10 @@ import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import { IChatConversation } from '../../models';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import ThreeColPage from '../../components/Page/ThreeColPage';
 import useApi from '../../state/useApi';
 import { ChatApi } from '../../api/chat';
 import useAuth from '../../state/auth/useAuth';
+import Page from '../../components/Page/Page';
 
 const CHAT_REFRESH_INTERVAL_MS = 2500;
 
@@ -102,64 +102,60 @@ export default function ConversationsPage() {
     );
   }
 
-  function SidePage() {
-    if (!conversation) return null;
-
-    return (
-      <Container>
-        <Row>
-          <h2>Users:</h2>
-        </Row>
-        {conversation.users.map((user) => (
-          <Row key={user._id}>
-            <p>{user.fullName}</p>
-          </Row>
-        ))}
-      </Container>
-    );
-  }
-
   return (
-    <ThreeColPage sidePane={<SidePage />}>
-      <Container>
-        <Row>
-          <Col>
-            <h1>Conversation</h1>
-          </Col>
-        </Row>
+    <Page>
+      <Stack direction="horizontal">
+        <Container>
+          <Row>
+            <Col>
+              <h1>Conversation</h1>
+            </Col>
+          </Row>
 
-        <Row className="my-4">
-          <Col>
-            <Stack gap={4}>
-              {conversation.messages.map((msg) => (
-                <ChatMessage
-                  key={msg._id}
-                  author={
-                    conversation.users.find((u) => u._id === msg.authorId)!
-                  }
-                  message={msg}
-                  sentByMe={msg.authorId === user._id}
+          <Row className="my-4">
+            <Col>
+              <Stack gap={4}>
+                {conversation.messages.map((msg) => (
+                  <ChatMessage
+                    key={msg._id}
+                    author={
+                      conversation.users.find((u) => u._id === msg.authorId)!
+                    }
+                    message={msg}
+                    sentByMe={msg.authorId === user._id}
+                  />
+                ))}
+              </Stack>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <Stack direction="horizontal" gap={4}>
+                <Form.Control
+                  type="text"
+                  value={currentMessage}
+                  onChange={(event) => setCurrentMessage(event.target.value)}
                 />
-              ))}
-            </Stack>
-          </Col>
-        </Row>
+                <Button onClick={() => sendMessage()}>
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </Button>
+              </Stack>
+            </Col>
+          </Row>
+        </Container>
 
-        <Row>
-          <Col>
-            <Stack direction="horizontal" gap={4}>
-              <Form.Control
-                type="text"
-                value={currentMessage}
-                onChange={(event) => setCurrentMessage(event.target.value)}
-              />
-              <Button onClick={() => sendMessage()}>
-                <FontAwesomeIcon icon={faPaperPlane} />
-              </Button>
-            </Stack>
-          </Col>
-        </Row>
-      </Container>
-    </ThreeColPage>
+        <div className="ms-auto">
+          <Row>
+            <h2>Users</h2>
+          </Row>
+          {conversation.users.map((user) => (
+            <Row key={user._id}>
+              <p>{user.fullName}</p>
+            </Row>
+          ))}
+        </div>
+      </Stack>
+    </Page>
   );
 }

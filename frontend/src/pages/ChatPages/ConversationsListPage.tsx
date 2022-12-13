@@ -3,7 +3,7 @@ import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useEffectOnce } from 'usehooks-ts';
 import { ChatApi } from '../../api/chat';
 import ConversationCard from '../../components/ConversationCard/ConversationCard';
-import TwoColPage from '../../components/Page/TwoColPage';
+import Page from '../../components/Page/Page';
 import { IChatConversation } from '../../models';
 import useApi from '../../state/useApi';
 
@@ -28,7 +28,7 @@ export default function ConversationsListPage() {
   });
 
   return (
-    <TwoColPage>
+    <Page>
       <Container>
         <Row>
           <Col>
@@ -53,6 +53,6 @@ export default function ConversationsListPage() {
             </Row>
           ))}
       </Container>
-    </TwoColPage>
+    </Page>
   );
 }
