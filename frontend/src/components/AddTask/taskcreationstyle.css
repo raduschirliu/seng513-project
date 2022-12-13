@@ -1,0 +1,15 @@
+h2.taskname {
+    font-size: xx-large;
+}
+
+.label {
+    font-weight: 700;
+}
+
+.control {
+    padding: 8px;
+}
+
+.group {
+    padding-top: 7px;
+}
