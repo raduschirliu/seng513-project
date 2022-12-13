@@ -12,7 +12,11 @@ export default function ConversationCard({ conversation }: IProps) {
   return (
     <Card role="button" onClick={() => navigate(`/app/chat/${conversation._id}`)}>
       <Card.Body>
-        {conversation.users.map((user) => user.fullName).join(', ')}
+        <img className='chatavatar' src={conversation.users[0].avatarUrl}></img>
+        <p style={{display: "inline", paddingRight: "10px"}}>{conversation.users[0].fullName},</p>
+        <img className='chatavatar' src={conversation.users[1].avatarUrl}></img>
+        <p style={{display: "inline"}}>{conversation.users[1].fullName}</p>
+        
       </Card.Body>
     </Card>
   );

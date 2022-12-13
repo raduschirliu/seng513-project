@@ -31,6 +31,7 @@ export default function AddTaskModal({
 
   const onSubmit: SubmitHandler<TaskFormData> = (data) => {
     console.log('adding new task to board...', boardId, data);
+    
     boardApi
       .createTask(boardId, {
         name: data.taskName,
@@ -86,7 +87,7 @@ export default function AddTaskModal({
                 placeholder="Task description..."
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-4">
+            <Button onClick={onClose} style={{backgroundColor:"#889bfc"}} variant="primary" type="submit" className="mt-4">
               Create
             </Button>
           </Form>
