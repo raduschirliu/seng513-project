@@ -20,7 +20,7 @@ export type AddTaskModalProps = ModalProps & {
   onClose: () => void;
 };
 
-export function AddTaskModal({
+export default function AddTaskModal({
   boardId,
   show,
   onTaskAdded,
