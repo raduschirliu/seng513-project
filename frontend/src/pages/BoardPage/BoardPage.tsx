@@ -10,6 +10,7 @@ import { IUser, ITask, IBoard } from '../../models';
 import useAuth from '../../state/auth/useAuth';
 import useApi from '../../state/useApi';
 import { BoardsApi } from '../../api/boards';
+import AddTask from '../../components/AddTask/TaskCreation';
 
 export interface ColumnInfo{
   name: string;
@@ -141,11 +142,13 @@ export default function BoardPage() {
     }
   };
 
-  const addTask = () => {
+  function addTask(props: any) {
     // TODO: complete
 
     // Opens a new task window to edit task details
     // Add task to database
+    <AddTask></AddTask>    
+    
   }
 
   const getTasks = () => {
@@ -216,7 +219,7 @@ export default function BoardPage() {
         </div>
 
         <div className='d-flex w-100 mw-100 task-column-container'>
-          <TaskArea columns={columns} onDragEnd={onDragEnd}/>
+          <TaskArea columns={cols} onDragEnd={onDragEnd}/>
         </div >
       </div >
     </div >
