@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { errorResponse, successResponse } from '../api';
 import { verifyAuthToken } from '../auth';
 import { collections } from '../db';
-import { IBoard, IComment, ITask } from '../models';
+import { IBoard, IComment, ITask, IUser } from '../models';
 
 const router = express.Router();
 export default router;
@@ -280,3 +280,46 @@ router.get('/boards/:boardId/your-created-tasks', async (req, res) => {
   successResponse<UserCreatedTasksResponse>(res, createdTasks);
 })
 
+/**************************************************
+ * Return list of members of board
+ **************************************************/
+
+type UserListResponse = IUser[];
+
+
+router.get('/boards/:boardId/list-users', async (req, res) => {
+  const userId = verifyAuthToken(req);
+  if (!userId) {
+    res.sendStatus(StatusCodes.UNAUTHORIZED);
+    return;
+  }
+
+  if (!ObjectId.isValid(req.params.boardId)) {
+    res.sendStatus(StatusCodes.BAD_REQUEST);
+    return;
+  }
+
+  const boardObjId = new ObjectId(req.params.boardId);
+  const board = await collections.boards().findOne({
+    _id: boardObjId,
+    $or: [{ userIds: userId }, { adminIds: userId }],
+  });
+
+  if (!board) {
+    errorResponse(res, 'Board does not exist');
+    return;
+  }
+
+  let userList = new Array<IUser>();
+  const users = board.userIds;
+
+  const data = collections.users().find();
+  
+  // Loads in dummy data
+  /*
+  res.json(
+    [{'Alex Zegras':0}, {'Blaire Yankapov':1}, {'Clive Xavier':2}, {'Danielle Washington':3}, {'Evan Veilleux':4}, {'Francine Underhill':5}]
+  );
+  */
+  successResponse<UserListResponse>(res, userList);
+})

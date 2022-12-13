@@ -19,6 +19,15 @@ router.post('/ping', (req, res) => {
   });
 });
 
+// Replies with test names
+router.get('/list-users', (req, res) => {
+  const data: IPingRequest = req.body;
+
+  res.json(
+    [{'Alex Zegras':0}, {'Blaire Yankapov':1}, {'Clive Xavier':2}, {'Danielle Washington':3}, {'Evan Veilleux':4}, {'Francine Underhill':5}]
+    );
+});
+
 // Test to see if the user is authenticated or not
 router.get('/authenticated', (req, res) => {
   const userId = verifyAuthToken(req);

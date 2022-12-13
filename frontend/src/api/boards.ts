@@ -53,4 +53,14 @@ export class BoardsApi extends Api {
         headers: this.headers,
       }).then((res) => res.data);
   }
+
+  userList(boardId: string): Promise<ApiResponse<ITask>> {
+    return this.api
+      //.get(`/${boardId}/list-users`,{
+      //  headers: this.headers,
+      //}).then((res) => res.data);
+      .get('/list-users',{
+        headers: this.headers,
+      }).then((res) => res.data);
+  }
 }
