@@ -36,6 +36,11 @@ export default function BoardUserListPage() {
     <Page>
       {board ? (
         <>
+          <div className="pb-2">
+            <h1 className="p-2 m-2">Board details</h1>
+            <p className="ms-5">Board ID: {boardId}</p>
+          </div>
+
           <UserList title="Admins" users={board.admins} currentUser={user} />
           <UserList title="Users" users={board.users} currentUser={user} />
         </>
