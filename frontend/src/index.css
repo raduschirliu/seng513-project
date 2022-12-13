@@ -1,4 +1,4 @@
-html{
+html {
   height: 100%;
   width: 100%;
   max-width: 100%;
@@ -15,7 +15,7 @@ body {
   min-height: 100%;
 }
 
-#root{
+#root {
   min-width: 100%;
   max-width: 100%;
   width: 100%;
@@ -38,24 +38,24 @@ code {
     monospace;
 }
 
-.logo{
+.logo {
   width: 206px;
   height: 95px;
   max-width: 100%;
   padding: 1em;
 }
 
-.nav-bar{
+.nav-bar {
   width: 15%;
   max-width: 15%;
 }
 
-.board{
+.board {
   width: 85%;
   max-width: 85%;
 }
 
-.task-column{
+.task-column {
   min-width: 30%;
   padding: 1em;
   margin: 1em;
@@ -70,13 +70,13 @@ code {
   height: 100%;
 }
 
-.task-column-container{
+.task-column-container {
   min-height: 83%;
   justify-content: center;
 }
 
-.plus-button{
-  background-color: #889BFC;
+.plus-button {
+  background-color: #889bfc;
   border-radius: 50%;
   border: none;
   height: 50px;
@@ -87,7 +87,7 @@ code {
 }
 
 .xbutton {
-  background-color: #889BFC;
+  background-color: #889bfc;
   border-width: 0px;
   border-radius: 5px;
   padding: 10px;
@@ -95,42 +95,42 @@ code {
   padding-bottom: 4px;
   color: white;
 }
-.button-container{
+.button-container {
   margin: 0 2em;
 }
 
-.button-container button{
+.button-container button {
   color: white;
   border: none;
   padding: 0.5em;
 }
 
-.plus-icon{
+.plus-icon {
   width: 30px;
   height: 30px;
   color: white;
 }
 
-.board-page-header{
+.board-page-header {
   justify-content: space-between;
 }
 
-.avatar{
+.avatar {
   width: 30px;
   height: 30px;
   line-height: 30px;
   border-radius: 50%;
   text-align: center;
   color: white;
-  background: #9E6060;
+  background: #9e6060;
 }
 
-.avatar-container p{
+.avatar-container p {
   margin-left: 0.5em;
   padding-top: 0.2em;
 }
 
-.task-box{
+.task-box {
   padding: 2em 2em 4em 2em;
   margin: 1em 0;
   height: 2em;
@@ -140,14 +140,14 @@ code {
   cursor: pointer;
 }
 
-.nav-element{
+.nav-element {
   cursor: pointer;
 }
 
-.nav-element:hover{
-  background-color: #889BFC;
+.nav-element:hover {
+  background-color: #889bfc;
 }
 
-.cur-element{
-  background-color: #889BFC;
+.cur-element {
+  background-color: #889bfc;
 }

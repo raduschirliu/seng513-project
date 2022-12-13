@@ -34,12 +34,16 @@ export class BoardsApi extends Api {
       .then((res) => res.data);
   }
 
-  createBoard(boardname: string, adminId: string): Promise<ApiResponse<IBoard>> {
+  createBoard(
+    boardname: string,
+    adminId: string
+  ): Promise<ApiResponse<IBoard>> {
     return this.api
       .post(
         '/create',
         {
-          boardname, adminId
+          boardname,
+          adminId,
         },
         { headers: this.headers }
       )
@@ -54,25 +58,30 @@ export class BoardsApi extends Api {
 
   yourTasks(boardId: string): Promise<ApiResponse<ITask>> {
     return this.api
-      .get(`/${boardId}/your-tasks`,{
+      .get(`/${boardId}/your-tasks`, {
         headers: this.headers,
-      }).then((res) => res.data);
+      })
+      .then((res) => res.data);
   }
 
   yourCreatedTasks(boardId: string): Promise<ApiResponse<ITask>> {
     return this.api
-      .get(`/${boardId}/your-created-tasks`,{
+      .get(`/${boardId}/your-created-tasks`, {
         headers: this.headers,
-      }).then((res) => res.data);
+      })
+      .then((res) => res.data);
   }
 
   userList(boardId: string): Promise<ApiResponse<IUser>> {
-    return this.api
-      //.get(`/${boardId}/list-users`,{
-      //  headers: this.headers,
-      //}).then((res) => res.data);
-      .get('/list-users',{
-        headers: this.headers,
-      }).then((res) => res.data);
+    return (
+      this.api
+        //.get(`/${boardId}/list-users`,{
+        //  headers: this.headers,
+        //}).then((res) => res.data);
+        .get('/list-users', {
+          headers: this.headers,
+        })
+        .then((res) => res.data)
+    );
   }
 }
