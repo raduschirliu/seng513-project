@@ -17,6 +17,12 @@ export default function SignUpPage() {
     const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
         console.log("Signing up in progress with\n", data);
         reset();
+
+        signUp(data.username, data.fullName, data.password)
+            .then((user) => {
+                console.log('Signed up successfully as: ', user);
+            })
+            .catch((err) => alert('Error signing up: ' + err));
     }
 
     return (
