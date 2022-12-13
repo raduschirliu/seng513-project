@@ -7,7 +7,7 @@ interface Props {
 const BoardTile: React.FC<Props> = ({ boardname }) => {
   return (
     <div style={{ paddingBottom: '12px' }}>
-      <div className="tile" style={{}}>
+      <div className="tile" >
         <h1
           style={{
             paddingLeft: '2vw',
