@@ -32,7 +32,7 @@ export default function ConversationsListPage() {
       <Container>
         <Row>
           <Col>
-            <h1>Conversations</h1>
+            <h1 className='p-2 m-2'>Conversations</h1>
           </Col>
         </Row>
 
