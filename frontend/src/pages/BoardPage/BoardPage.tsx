@@ -141,11 +141,17 @@ export default function BoardPage() {
     }
   };
 
-  const addTask = () => {
+  const addTask = (task: ITask) => {
     // TODO: complete
 
     // Opens a new task window to edit task details
     // Add task to database
+  }
+
+  const modifyTask = (task: ITask) => {
+    // TODO: complete
+
+    // Calls task PUT endpoint to modify task
   }
 
   const getTasks = () => {
