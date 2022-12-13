@@ -22,15 +22,12 @@ export class BoardsApi extends Api {
       .then((res) => res.data);
   }
 
-  create(task: ITask): Promise<ApiResponse<IBoard>> {
+  createTask(
+    boardId: string,
+    task: Partial<ITask>
+  ): Promise<ApiResponse<ITask>> {
     return this.api
-      .post(
-        '/',
-        {
-          task,
-        },
-        { headers: this.headers }
-      )
+      .post(`/${boardId}/tasks`, task, { headers: this.headers })
       .then((res) => res.data);
   }
 
@@ -54,16 +51,18 @@ export class BoardsApi extends Api {
 
   yourTasks(boardId: string): Promise<ApiResponse<ITask>> {
     return this.api
-      .get(`/${boardId}/your-tasks`,{
+      .get(`/${boardId}/your-tasks`, {
         headers: this.headers,
-      }).then((res) => res.data);
+      })
+      .then((res) => res.data);
   }
 
   yourCreatedTasks(boardId: string): Promise<ApiResponse<ITask>> {
     return this.api
-      .get(`/${boardId}/your-created-tasks`,{
+      .get(`/${boardId}/your-created-tasks`, {
         headers: this.headers,
-      }).then((res) => res.data);
+      })
+      .then((res) => res.data);
   }
 
   userList(boardId: string): Promise<ApiResponse<IUser>> {
