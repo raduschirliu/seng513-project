@@ -34,31 +34,31 @@ export default function Example() {
 
   let com1: IComment = {
     _id: "2",
-    author: ass1.username,
+    authorId: ass1.username,
     message: "This is a very good task",
   }
 
   let com2: IComment = {
     _id: "3",
-    author: ass2.username,
+    authorId: ass2.username,
     message: "I agree. This is the best task. The reason that this task is so good is because the instructions are so clear and they gave us so much time!",
   }
 
   let com3: IComment = {
     _id: "5",
-    author: ass1.username,
+    authorId: ass1.username,
     message: "I guess we had better get started on this task now",
   }
 
   let com4: IComment = {
     _id: "6",
-    author: ass2.username,
+    authorId: ass2.username,
     message: "Ok. But first I need to recipe lorem ipsum",
   }
 
   let com5: IComment = {
     _id: "7",
-    author: ass2.username,
+    authorId: ass2.username,
     message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
   }
 

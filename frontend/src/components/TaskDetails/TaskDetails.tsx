@@ -23,7 +23,7 @@ function MyVerticallyCenteredModal(props: any) {
   const handleMakeComment = () => {
     setComments((prevComments: IComment[]) => [
       ...prevComments,
-      {_id:0,author:me.username,message:mycomment}
+      {_id:0,authorId:me.username,message:mycomment}
 
     ]);
   }
@@ -91,7 +91,7 @@ function MyVerticallyCenteredModal(props: any) {
               {
                 comments.map((comment: IComment, index: Key) => (
                   <div className='post'key={index}>
-                    <img className='commentavatar' alt='?' src={users.find((u: IUser) => {return u.username === comment.author;}).avatarUrl}></img>
+                    <img className='commentavatar' alt='?' src={users.find((u: IUser) => {return u.username === comment.authorId;}).avatarUrl}></img>
                    
                     <p className='comment'>{comment.message}</p>
                   </div>
