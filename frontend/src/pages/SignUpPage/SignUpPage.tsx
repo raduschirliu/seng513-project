@@ -46,11 +46,11 @@ export default function SignUpPage() {
                         A software curated for agile development. Join Today!
                     </p>
                     <ul className="leftHeroFeaturesList">
-                        <li><span>✓</span> Create a project specific board.</li>
-                        <li><span>✓</span> Create &amp; store tasks on a project board.</li>
-                        <li><span>✓</span> Join an exisiting project board through a code.</li>
-                        <li><span>✓</span> Self assign a task &amp;  comment on tasks.</li>
-                        <li><span>✓</span> And so much more!</li>
+                        <li><span className="checkMark">✓</span> Create a project specific board.</li>
+                        <li><span className="checkMark">✓</span> Create &amp; store tasks on a project board.</li>
+                        <li><span className="checkMark">✓</span> Join an exisiting project board through a code.</li>
+                        <li><span className="checkMark">✓</span> Self assign a task &amp;  comment on tasks.</li>
+                        <li><span className="checkMark">✓</span> And so much more!</li>
                     </ul>
                 </div>
 
