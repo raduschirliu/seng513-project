@@ -13,15 +13,6 @@ import Button from 'react-bootstrap/Button';
 import Modal, { ModalProps } from 'react-bootstrap/Modal';
 import { IComment, ITask, IUser } from '../../models';
 import './taskdetailstyle.css';
-<<<<<<< HEAD
-
-function MyVerticallyCenteredModal(props: any) {
-  const [comments, setComments] = useState(props.task.comments);
-  const [assigned, setAssigned] = useState(props.task.assigned);
-  const [users, s] = useState(props.users);
-  const [me, a] = useState(props.me);
-  const [mycomment, setMyComment] = useState('');
-=======
 import { TasksApi } from '../../api/tasks';
 import useApi from '../../state/useApi';
 import useAuth from '../../state/auth/useAuth';
@@ -68,7 +59,6 @@ export default function TaskDetails({
   const [mycomment, setMyComment] = useState('');
   const tasksApi = useApi(TasksApi);
   const { user } = useAuth();
->>>>>>> main
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -76,28 +66,6 @@ export default function TaskDetails({
     setMyComment('');
   };
   const handleMakeComment = () => {
-<<<<<<< HEAD
-    setComments((prevComments: IComment[]) => [
-      ...prevComments,
-      { _id: 0, authorId: me.username, message: mycomment },
-    ]);
-  };
-  const handleAddAssigned = () => {
-    if (!assigned.some((item: string) => me.username === item)) {
-      setAssigned((prevAssigned: string[]) => [...prevAssigned, me.username]);
-    }
-  };
-
-  let lightclass = '';
-  let status = '';
-  if (props.task.status === 'inprogress') {
-    status = 'In progress';
-    lightclass = 'ylight';
-  } else if (props.task.status === 'todo') {
-    status = 'To-do';
-    lightclass = 'rlight';
-  } else if (props.task.status === 'done') {
-=======
     tasksApi.comment(task._id, mycomment).then((res) => {
       if (!res.success) {
         console.error('Failed to post comment', res.error);
@@ -131,7 +99,6 @@ export default function TaskDetails({
     status = 'To-do';
     lightclass = 'rlight';
   } else if (task.status === 'done') {
->>>>>>> main
     status = 'completed';
     lightclass = 'glight';
   }
@@ -146,21 +113,13 @@ export default function TaskDetails({
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-<<<<<<< HEAD
-          <h1 className="title">{props.task.name}</h1>
-=======
           <h1 className="title">{task.name}</h1>
->>>>>>> main
           <div className="status">
             <span className={lightclass}></span>
             <i className="statusword">{status}</i>
           </div>
         </Modal.Title>
-<<<<<<< HEAD
-        <button className="xbutton" onClick={props.onHide}>
-=======
         <button className="xbutton" onClick={onHide}>
->>>>>>> main
           <FontAwesomeIcon className="x-icon" icon={faXmark} />
         </button>
       </Modal.Header>
@@ -173,24 +132,15 @@ export default function TaskDetails({
           <div className="assigned">
             <h4 className="atitle">Assigned</h4>
             <div className="avatars">
-<<<<<<< HEAD
-              {assigned.map((user: string, index: Key) => (
-=======
               {task.assignedUserIds.map((user: string, index: Key) => (
->>>>>>> main
                 <img
                   key={index}
                   className="taskavatar"
                   alt="?"
                   src={
                     users.find((u: IUser) => {
-<<<<<<< HEAD
-                      return u.username === user;
-                    }).avatarUrl
-=======
                       return u._id === user;
                     })?.avatarUrl
->>>>>>> main
                   }
                 ></img>
               ))}
@@ -208,22 +158,6 @@ export default function TaskDetails({
           <h4>Comments</h4>
           <div className="innercomments">
             <div className="commentbox">
-<<<<<<< HEAD
-              {comments.map((comment: IComment, index: Key) => (
-                <div className="post" key={index}>
-                  <img
-                    className="commentavatar"
-                    alt="?"
-                    src={
-                      users.find((u: IUser) => {
-                        return u.username === comment.authorId;
-                      }).avatarUrl
-                    }
-                  ></img>
-
-                  <p className="comment">{comment.message}</p>
-                </div>
-=======
               {task.comments.map((comment: IComment) => (
                 <TaskComment
                   key={comment._id}
@@ -237,7 +171,6 @@ export default function TaskDetails({
                   comment={comment}
                   users={users}
                 />
->>>>>>> main
               ))}
             </div>
             <div className="writebox">
@@ -260,30 +193,3 @@ export default function TaskDetails({
     </Modal>
   );
 }
-<<<<<<< HEAD
-
-export default function TaskDetails(props: {
-  thetask: ITask;
-  users: IUser[];
-  me: IUser;
-}) {
-  const [modalShow, setModalShow] = useState(false);
-
-  return (
-    <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        {props.thetask.name}
-      </Button>
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        task={props.thetask}
-        users={props.users}
-        me={props.me}
-      />
-    </>
-  );
-}
-=======
->>>>>>> main
