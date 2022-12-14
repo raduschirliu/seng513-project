@@ -96,7 +96,7 @@ export default function JoinedBoardsPage() {
               textAlign: 'left',
             }}
           >
-            <div style={{ paddingTop: '15px', paddingLeft: '20px' }}>
+            <div style={{ paddingTop: '20px', paddingLeft: '20px' }}>
               <input
                 type="text"
                 placeholder="Enter project code"
@@ -117,7 +117,7 @@ export default function JoinedBoardsPage() {
               <Button
                 style={{
                   width: '100px',
-                  height: '30px',
+                  height: '40px',
                   backgroundColor: '#889BFC',
                 }}
                 onClick={joinBoard}
