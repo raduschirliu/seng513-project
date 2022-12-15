@@ -157,3 +157,9 @@ code {
 .cur-element {
   background-color: #889bfc;
 }
+
+@media (min-width: 768px) {
+  .page {
+    height: 100%;
+  }
+}
