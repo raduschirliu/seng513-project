@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import useNav from '../../state/useNav';
 import Nav from '../Nav/Nav';
 import AuthProtected from '../Page/AuthProtected';
+import './AppRoot.css';
 
 export default function AppRoot() {
   const params = useParams();
@@ -16,17 +17,15 @@ export default function AppRoot() {
   }, [params, setCurrentBoardId]);
 
   return (
-    <Container fluid className="h-100 bg-light">
-      <Row className="h-100">
-        <Col md={2}>
-          <Nav />
-        </Col>
-        <Col md={10}>
-          <AuthProtected>
-            <Outlet />
-          </AuthProtected>
-        </Col>
-      </Row>
-    </Container>
+    <div className="AppRoot-container bg-light">
+      <div className="AppRoot-nav">
+        <Nav />
+      </div>
+      <div className="AppRoot-content">
+        <AuthProtected>
+          <Outlet />
+        </AuthProtected>
+      </div>
+    </div>
   );
 }
