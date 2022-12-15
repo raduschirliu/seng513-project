@@ -131,3 +131,51 @@ label {
   background: rgba(9, 2, 148, 0.795);
   color: white;
 }
+
+@media (max-width: 500px) {
+
+  /* .login-navBarContainer {
+    height: 120px;
+  } */
+
+  .login-heroSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+ 
+  .login-rightHero {
+    position: relative;
+    align-self: center;
+    left: 0;
+    top: 7%;
+    right: 0;
+    bottom: 0;
+    display: flex;
+  }
+  .login-leftHero {
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    left: 6%;
+    top: 3%;;
+    right: 0;
+    bottom: 0;
+  }
+  .login-leftHeroFeaturesList {
+    display: none;
+  }
+  .login-leftHeroImage {
+    width: 460px;
+  }
+
+  .login-loginButton {
+    height: 60px;
+  }
+
+  .login-navBarContainer {
+    height: 120px;
+  }
+
+
+}
