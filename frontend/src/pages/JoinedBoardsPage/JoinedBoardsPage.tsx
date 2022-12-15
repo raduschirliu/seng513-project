@@ -68,14 +68,12 @@ export default function JoinedBoardsPage() {
           className="d-flex flex-row"
           style={{ paddingTop: '12px', paddingLeft: '6vw' }}
         >
-          <h1 style={{}}>Your Projects</h1>
-          <div style={{ position: 'absolute', right: '8.2vw', top: '20px' }}>
-            <CreateBoardModal
-              onBoardCreated={(board: IBoard) => {
-                setBoards((prevValue) => [...prevValue, board]);
-              }}
-            />
-          </div>
+          <h1 className="flex-grow-1">Your Projects</h1>
+          <CreateBoardModal
+            onBoardCreated={(board: IBoard) => {
+              setBoards((prevValue) => [...prevValue, board]);
+            }}
+          />
         </div>
         <div
           className="d-flex flex-column"
