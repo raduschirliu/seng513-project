@@ -100,3 +100,50 @@ label {
   background: rgba(99, 192, 254, 0.65);
   color: rgba(0, 0, 0, 0.738);
 }
+
+@media (max-width: 500px) {
+
+  /* .login-navBarContainer {
+    height: 120px;
+  } */
+
+  .heroSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+ 
+  .rightHero {
+    position: relative;
+    align-self: center;
+    left: 0;
+    top: 9%;
+    right: 0;
+    bottom: 0;
+    display: flex;
+  }
+  .leftHero {
+    position: absolute;
+    width: 90%;
+    height: 30%;
+    left: 6%;
+    top: 2%;;
+    right: 0;
+    bottom: 0;
+  }
+  .leftHeroFeaturesList {
+    display: none;
+  }
+  .leftHeroImage {
+    width: 440px;
+  }
+  
+  .textbox {
+    margin: 0;
+  }
+
+  .createButton {
+    height: 50px;
+    width: 100%;
+  }
+}
