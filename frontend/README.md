@@ -1,6 +1,18 @@
-# Getting Started with Create React App
+# frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Setup
+
+If this is the first time running/building the backend, run
+```
+npm install
+```
+(this will take a while, but you should only need to do this once)  
+
+  
+Create a file in this folder called `.env`, and copy-paste the contents of `.env.template` into it.  
+Set the empty fields to valid values to avoid any errors.  
+  
+Alternatively, set the values within the machine's environment instead of using a `.env` file.
 
 ## Available Scripts
 

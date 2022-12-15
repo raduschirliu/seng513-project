@@ -10,7 +10,9 @@ npm install
 
   
 Create a file in the `backend/` folder called `.env`, and copy-paste the contents of `.env.template` into it.  
-Set the empty fields to valid values to avoid any errors
+Set the empty fields to valid values to avoid any errors.  
+  
+Alternatively, set the values within the machine's environment instead of using a `.env` file.
 
 ## Developing
   
@@ -18,3 +20,12 @@ To start the server in development mode (will restart any time you make changes 
 ```
 npm run dev
 ```
+
+## Building
+
+To build the backend without starting it, run:
+```
+npm run build
+```
+
+The build artifacts can then be found in the `build/` folder.
